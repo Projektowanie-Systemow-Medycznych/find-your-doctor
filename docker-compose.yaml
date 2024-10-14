@@ -1,0 +1,28 @@
+version: "3.8"
+
+networks:
+  system:
+    driver: bridge
+services:
+  postgresqldb:
+    container_name: postgresql
+    image: postgres:14.2
+    restart: on-failure
+    command: ["postgres", "-c", "log_statement=all"]
+    networks:
+      - system
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=user
+      - POSTGRES_DB=medicament-outlet
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 50m

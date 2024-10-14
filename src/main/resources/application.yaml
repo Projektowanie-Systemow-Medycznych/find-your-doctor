@@ -1,0 +1,19 @@
+server:
+  port: 7777
+spring:
+  datasource:
+    url: jdbc:postgresql://postgresqldb:5432/medicament-outlet
+    username: user
+    password: password
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      connectionTimeout: 20000
+      maximumPoolSize: 5
+  flyway:
+    enabled: false
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML5
+    encoding: UTF-8
+    cache: false
