@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.stasienko</groupId>
-    <artifactId>medicament-outlet</artifactId>
+    <groupId>com.example</groupId>
+    <artifactId>find-your-doctor</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
@@ -67,7 +67,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>com.stasienko.MedicineOutletApplication</mainClass>
+                    <mainClass>com.example.FindTourDoctorApplication</mainClass>
                 </configuration>
             </plugin>
         </plugins>
@@ -96,7 +96,7 @@
                         <artifactId>spring-boot-maven-plugin</artifactId>
                         <version>${spring-boot.version}</version>
                         <configuration>
-                            <mainClass>com.stasienko.console.SpringBootConsoleApplication</mainClass>
+                            <mainClass>com.example.console.SpringBootConsoleApplication</mainClass>
                         </configuration>
                         <executions>
                             <execution>

@@ -1,3 +1,3 @@
 FROM eclipse-temurin:21-jdk-alpine
-COPY target/medicament-outlet-1.0-SNAPSHOT.jar medicament-outlet.jar
-ENTRYPOINT ["java","-jar","/medicament-outlet.jar"]
+COPY target/find-your-doctor-1.0-SNAPSHOT.jar find-your-doctor.jar
+ENTRYPOINT ["java","-jar","/find-your-doctor.jar"]

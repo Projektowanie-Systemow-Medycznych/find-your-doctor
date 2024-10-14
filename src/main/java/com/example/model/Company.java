@@ -1,4 +1,4 @@
-package com.stasienko.model;
+package com.example.model;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;

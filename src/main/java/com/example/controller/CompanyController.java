@@ -1,7 +1,7 @@
-package com.stasienko.controller;
+package com.example.controller;
 
-import com.stasienko.model.Company;
-import com.stasienko.service.CompanyService;
+import com.example.model.Company;
+import com.example.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

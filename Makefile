@@ -4,8 +4,8 @@ prepare:
 
 run:
 	./mvnw clean package -DskipTests && \
-    docker build -t medicament-outlet . && \
-    docker run --rm -p 7777:7777 --network=medicament-outlet_system --name app medicament-outlet
+    docker build -t find-your-doctor . && \
+    docker run --rm -p 7777:7777 --network=find-your-doctor_system --name app find-your-doctor
 
 clean:
 	docker ps -a | grep app && docker stop app && docker rm app || true

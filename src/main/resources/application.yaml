@@ -2,7 +2,7 @@ server:
   port: 7777
 spring:
   datasource:
-    url: jdbc:postgresql://postgresqldb:5432/medicament-outlet
+    url: jdbc:postgresql://postgresqldb:5432/find-your-doctor
     username: user
     password: password
     driver-class-name: org.postgresql.Driver

@@ -1,4 +1,4 @@
-package com.stasienko.console;
+package com.example.console;
 
 import org.flywaydb.core.Flyway;
 import org.springframework.beans.factory.annotation.Value;

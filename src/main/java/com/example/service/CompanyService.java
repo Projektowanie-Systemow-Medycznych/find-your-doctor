@@ -1,7 +1,7 @@
-package com.stasienko.service;
+package com.example.service;
 
-import com.stasienko.model.Company;
-import com.stasienko.repository.CompanyRepository;
+import com.example.model.Company;
+import com.example.repository.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;

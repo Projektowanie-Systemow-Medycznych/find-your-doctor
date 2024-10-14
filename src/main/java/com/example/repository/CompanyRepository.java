@@ -1,6 +1,6 @@
-package com.stasienko.repository;
+package com.example.repository;
 
-import com.stasienko.model.Company;
+import com.example.model.Company;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;
