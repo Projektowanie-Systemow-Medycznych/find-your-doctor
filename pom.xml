@@ -67,7 +67,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>com.example.FindTourDoctorApplication</mainClass>
+                    <mainClass>com.example.FindYourDoctorApplication</mainClass>
                 </configuration>
             </plugin>
         </plugins>
