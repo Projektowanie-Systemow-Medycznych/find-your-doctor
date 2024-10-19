@@ -7,6 +7,8 @@ import java.util.UUID;
 @Table(name = "doctor")
 public class Doctor {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(updatable = false, nullable = false)
     private UUID id;
 
     private String login;

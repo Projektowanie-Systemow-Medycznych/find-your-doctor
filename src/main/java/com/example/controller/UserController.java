@@ -74,4 +74,20 @@ public class UserController {
         session.invalidate();
         return "redirect:/";
     }
+
+    @GetMapping("/register")
+    public String showRegistrationForm(Model model) {
+        model.addAttribute("user", new User());
+        return "user/user-register";
+    }
+
+    @PostMapping("/register")
+    public String processRegistration(@ModelAttribute("user") User user, Model model) {
+        if (userRepository.findByLogin(user.getLogin()).isPresent()) {
+            model.addAttribute("error", "Login already taken");
+            return "user/user-register";
+        }
+        userRepository.save(user);
+        return "redirect:/user/login";
+    }
 }
