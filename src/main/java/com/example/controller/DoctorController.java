@@ -17,7 +17,7 @@ public class DoctorController {
 
     @GetMapping("/login")
     public String showDoctorLoginPage() {
-        return "doctor-login";
+        return "doctor/doctor-login";
     }
 
     @PostMapping("/login")
@@ -26,10 +26,10 @@ public class DoctorController {
                                      Model model) {
         Doctor doctor = doctorRepository.findByLogin(login).orElse(null);
         if (doctor != null && doctor.getPassword().equals(password)) {
-            return "doctor-home";
+            return "doctor/doctor-home";
         } else {
             model.addAttribute("error", "Invalid login or password");
-            return "doctor-login";
+            return "doctor/doctor-login";
         }
     }
 }

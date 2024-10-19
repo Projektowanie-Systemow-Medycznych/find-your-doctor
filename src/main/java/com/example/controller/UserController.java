@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/user")
@@ -17,20 +18,42 @@ public class UserController {
 
     @GetMapping("/login")
     public String showUserLoginPage() {
-        return "user-login";
+        return "user/user-login";
     }
 
     @PostMapping("/login")
     public String processUserLogin(@RequestParam("login") String login,
                                    @RequestParam("password") String password,
-                                   Model model) {
+                                   Model model, HttpSession session) {
         User user = userRepository.findByLogin(login).orElse(null);
         if (user != null && user.getPassword().equals(password)) {
-            return "user-home";
+            session.setAttribute("loggedInUser", user);
+            return "redirect:/";
         } else {
             model.addAttribute("error", "Invalid login or password");
-            return "user-login";
+            return "user/user-login";
         }
     }
-}
 
+    @GetMapping("/profile")
+    public String showUserProfile(Model model, HttpSession session) {
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            return "redirect:/user/login";
+        }
+        model.addAttribute("user", loggedInUser);
+        return "user/user-profile";
+    }
+
+    @PostMapping("/profile")
+    public String updateUserProfile(@ModelAttribute("user") User user, HttpSession session) {
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            return "redirect:/user/login";
+        }
+        loggedInUser.setName(user.getName());
+        userRepository.save(loggedInUser);
+        session.setAttribute("loggedInUser", loggedInUser);
+        return "redirect:/user/profile";
+    }
+}

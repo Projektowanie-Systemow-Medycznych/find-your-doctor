@@ -1,12 +1,20 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Login Page</title>
+    <title>Home Page</title>
 </head>
 <body>
-    <h1>Welcome to the Application</h1>
-    <a href="/user/login"><button>Login as User</button></a>
-    <a href="/doctor/login"><button>Login as Doctor</button></a>
+<header>
+    <a href="/user/login"><button>Login</button></a>
+    <a href="/user/profile" th:if="${session.loggedInUser != null}"><button>Edit Profile</button></a>
+</header>
+
+<h1>Welcome to the Application</h1>
+
+<h2>List of Doctors</h2>
+<ul>
+    <li th:each="doctor : ${doctors}" th:text="${doctor.name}"></li>
+</ul>
+
 </body>
 </html>
-

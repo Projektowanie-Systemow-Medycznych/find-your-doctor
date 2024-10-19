@@ -4,13 +4,14 @@ import jakarta.persistence.*;
 import java.util.UUID;
 
 @Entity
-@Table(name = "doctors")
+@Table(name = "doctor")
 public class Doctor {
     @Id
     private UUID id;
 
     private String login;
     private String password;
+    private String name;
 
     public UUID getId() {
         return id;
@@ -34,5 +35,13 @@ public class Doctor {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
