@@ -62,6 +62,8 @@ public class UserController {
             return "redirect:/user/login";
         }
         loggedInUser.setName(user.getName());
+        loggedInUser.setLogin(user.getLogin());
+        loggedInUser.setPassword(user.getPassword());
         userRepository.save(loggedInUser);
         session.setAttribute("loggedInUser", loggedInUser);
         return "redirect:/user/profile";
