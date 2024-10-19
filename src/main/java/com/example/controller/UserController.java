@@ -45,7 +45,17 @@ public class UserController {
         return "user/user-profile";
     }
 
-    @PostMapping("/profile")
+    @GetMapping("/edit-profile")
+    public String editForm(Model model, HttpSession session) {
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            return "redirect:/user/login";
+        }
+        model.addAttribute("user", loggedInUser);
+        return "user/edit-profile";
+    }
+
+    @PostMapping("/edit-profile")
     public String updateUserProfile(@ModelAttribute("user") User user, HttpSession session) {
         User loggedInUser = (User) session.getAttribute("loggedInUser");
         if (loggedInUser == null) {
