@@ -25,6 +25,14 @@ public class UserController {
     public String processUserLogin(@RequestParam("login") String login,
                                    @RequestParam("password") String password,
                                    Model model, HttpSession session) {
+        if (session.getAttribute("loggedInDoctor") != null) {
+            model.addAttribute("error", "You are logged in as a doctor. Please log out from the doctor account.");
+            return "user/user-login";
+        }
+        if (session.getAttribute("loggedInUser") != null) {
+            model.addAttribute("error", "You are already logged in as a user. Please log out first.");
+            return "user/user-login";
+        }
         User user = userRepository.findByLogin(login).orElse(null);
         if (user != null && user.getPassword().equals(password)) {
             session.setAttribute("loggedInUser", user);

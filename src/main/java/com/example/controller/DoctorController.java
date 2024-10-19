@@ -35,6 +35,14 @@ public class DoctorController {
     public String processDoctorLogin(@RequestParam("login") String login,
                                      @RequestParam("password") String password,
                                      Model model, HttpSession session) {
+        if (session.getAttribute("loggedInDoctor") != null) {
+            model.addAttribute("error", "You are logged in as a doctor. Please log out from the doctor account.");
+            return "doctor/doctor-login";
+        }
+        if (session.getAttribute("loggedInUser") != null) {
+            model.addAttribute("error", "You are already logged in as a user. Please log out first.");
+            return "doctor/doctor-login";
+        }
         Doctor doctor = doctorRepository.findByLogin(login).orElse(null);
         if (doctor != null && doctor.getPassword().equals(password)) {
             session.setAttribute("loggedInDoctor", doctor);
