@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Edit Doctor Profile</title>
+</head>
+<body>
+<header>
+  <a href="/"><button>Home</button></a>
+</header>
+
+<h1>Edit Your Profile</h1>
+
+<form action="/doctor/edit-profile" method="post" th:object="${doctor}">
+  <label for="name">Name:</label>
+  <input type="text" id="name" name="name" th:value="${doctor.name}" required>
+  <br><br>
+
+  <label for="login">New login:</label>
+  <input type="text" id="login" name="login" th:value="${doctor.login}" required>
+  <br><br>
+
+  <label for="password">New Password:</label>
+  <input type="text" id="password" name="password" th:value="${doctor.password}" required>
+  <br><br>
+
+  <button type="submit">Save Changes</button>
+</form>
+</body>
+</html>
