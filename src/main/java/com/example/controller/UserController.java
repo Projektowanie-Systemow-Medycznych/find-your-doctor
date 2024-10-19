@@ -68,4 +68,10 @@ public class UserController {
         session.setAttribute("loggedInUser", loggedInUser);
         return "redirect:/user/profile";
     }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/";
+    }
 }
