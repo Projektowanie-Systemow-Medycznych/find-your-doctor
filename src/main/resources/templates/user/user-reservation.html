@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        .highlight {
+            background-color: #f2f2f2;
+        }
+        .nav-button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        .date {
+            font-size: 30px;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <h1>Appointment Calendar</h1>
+    <span id="current-month-year" class="date"></span>
+</div>
+<table>
+    <thead>
+    <tr>
+        <th>Mon</th>
+        <th>Tue</th>
+        <th>Wed</th>
+        <th>Thu</th>
+        <th>Fri</th>
+        <th>Sat</th>
+        <th>Sun</th>
+    </tr>
+    </thead>
+    <tbody id="calendar-body">
+    <!-- Calendar days will be inserted here by JavaScript -->
+    </tbody>
+</table>
+
+<div class="nav-container">
+    <button class="nav-button" id="prev-month-button">Previous Month</button>
+    <button class="nav-button" id="next-month-button">Next Month</button>
+</div>
+
+<script th:inline="javascript">
+    let currentYear = /*[[${currentYear}]]*/ 2024;
+    let currentMonth = /*[[${currentMonth}]]*/ 10; // October (0-based index) October is 9
+    const reservations = /*[[${reservations}]]*/ [];
+
+    //console.log(currentYear);
+    //console.log(currentMonth);
+    //console.log(reservations);
+
+    function updateMonthYearDisplay(year, month) {
+        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        document.getElementById('current-month-year').textContent = `${monthNames[month]} ${year}`;
+    }
+
+    function generateCalendar(year, month, reservations) {
+        const calendarBody = document.getElementById('calendar-body');
+        calendarBody.innerHTML = '';
+        const firstDay = (new Date(year, month).getDay() + 6) % 7; // Adjust to start from Monday
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        let date = 1;
+
+        for (let i = 0; i < 6; i++) {
+            const row = document.createElement('tr');
+
+            for (let j = 0; j < 7; j++) {
+                const cell = document.createElement('td');
+                if (i === 0 && j < firstDay) {
+                    cell.innerHTML = '';
+                } else if (date > daysInMonth) {
+                    break;
+                } else {
+                    cell.innerHTML = date;
+                    const reservationDate = new Date(year, month, date+1).toISOString().split('T')[0];
+
+                    if (reservations.includes(reservationDate)) {
+                        cell.classList.add('highlight');
+                        //console.log(reservationDate);
+                       //console.log(reservations);
+                        //console.log(date);
+                    }
+                    date++;
+                }
+                row.appendChild(cell);
+            }
+            calendarBody.appendChild(row);
+        }
+        updateMonthYearDisplay(year, month);
+    }
+
+    document.getElementById('next-month-button').addEventListener('click', () => {
+        currentMonth++;
+        if (currentMonth > 11) {
+            currentMonth = 0;
+            currentYear++;
+        }
+        generateCalendar(currentYear, currentMonth, reservations);
+    });
+
+    document.getElementById('prev-month-button').addEventListener('click', () => {
+        currentMonth--;
+        if (currentMonth < 0) {
+            currentMonth = 11;
+            currentYear--;
+        }
+        generateCalendar(currentYear, currentMonth, reservations);
+    });
+
+    // Example reservations array
+    // const reservations = ['2024-10-15', '2024-10-20'];
+    generateCalendar(currentYear, currentMonth, reservations);
+</script>
+</body>
+</html>
