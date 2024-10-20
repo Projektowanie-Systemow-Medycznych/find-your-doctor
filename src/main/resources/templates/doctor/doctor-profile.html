@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Doctor Profile</title>
+</head>
+<body>
+<header>
+  <a href="/doctor/edit-profile"><button>Modify Profile</button></a>
+  <a href="/doctor/logout"><button>Log Out</button></a>
+</header>
+
+<h1>Your Profile</h1>
+
+<form action="/doctor/profile" method="post" th:object="${doctor}">
+  <label for="name">Name:</label>
+  <input type="text" id="name" name="name" th:value="${doctor.name}" readonly>
+</form>
+
+</body>
+</html>
