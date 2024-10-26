@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservations</title>
+</head>
+<body>
+<h1>Reservations for <span th:text="${date}">Data</span></h1>
+<ul>
+    <li th:if="${#lists.isEmpty(reservations)}">No reservations for this day.</li>
+    <li th:each="reservation : ${reservations}">
+        <span th:text="${reservation.datetime}">Reservation Date</span> - <span th:text="${reservation.address}">Reservation Address</span>
+    </li>
+</ul>
+<a href="/user/reservation">Back to Calendar</a>
+</body>
+</html>

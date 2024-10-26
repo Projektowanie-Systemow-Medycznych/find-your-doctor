@@ -129,4 +129,22 @@ public class UserController {
         model.addAttribute("user", loggedInUser);
         return "user/user-reservation";
     }
+
+    @GetMapping("/reservation/day")
+    public String showReservationsForDay(@RequestParam("date") String date, Model model, HttpSession session) {
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            return "redirect:/user/login";
+        }
+        List<Reservation> reservations = reservationRepository.findByUser(loggedInUser);
+
+        List<Reservation> reservationsForDay = reservations.stream()
+                .filter(reservation -> reservation.getDatetime().toLocalDate().toString().equals(date))
+                .collect(Collectors.toList());
+
+        model.addAttribute("reservations", reservationsForDay);
+        model.addAttribute("date", date);
+        return "user/user-reservation-day";
+    }
+
 }

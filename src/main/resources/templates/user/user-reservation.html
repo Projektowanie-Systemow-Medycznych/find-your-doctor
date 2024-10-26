@@ -61,6 +61,10 @@
     <button class="nav-button" id="next-month-button">Next Month</button>
 </div>
 
+<form id="day-form" action="/user/reservation/day" method="get" style="display: none;">
+    <input type="hidden" id="selected-date" name="date">
+</form>
+
 <script th:inline="javascript">
     let currentYear = /*[[${currentYear}]]*/ 2024;
     let currentMonth = /*[[${currentMonth}]]*/ 10; // October (0-based index) October is 9
@@ -101,6 +105,10 @@
                        //console.log(reservations);
                         //console.log(date);
                     }
+                    cell.addEventListener('click', () => {
+                        document.getElementById('selected-date').value = reservationDate;
+                        document.getElementById('day-form').submit();
+                    });
                     date++;
                 }
                 row.appendChild(cell);
