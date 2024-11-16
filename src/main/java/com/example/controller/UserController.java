@@ -120,7 +120,7 @@ public class UserController {
         int currentMonth = currentYearMonth.getMonthValue() - 1;
 
         List<String> reservationDates = reservations.stream()
-                .map(reservation -> reservation.getDatetime().toLocalDate().toString())
+                .map(reservation -> reservation.getSlot().getDatetime().toLocalDate().toString())
                 .collect(Collectors.toList());
 
         model.addAttribute("reservations", reservationDates);
@@ -139,7 +139,7 @@ public class UserController {
         List<Reservation> reservations = reservationRepository.findByUser(loggedInUser);
 
         List<Reservation> reservationsForDay = reservations.stream()
-                .filter(reservation -> reservation.getDatetime().toLocalDate().toString().equals(date))
+                .filter(reservation -> reservation.getSlot().getDatetime().toLocalDate().toString().equals(date))
                 .collect(Collectors.toList());
 
         model.addAttribute("reservations", reservationsForDay);
