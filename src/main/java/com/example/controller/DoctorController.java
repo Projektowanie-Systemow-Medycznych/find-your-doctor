@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpSession;
 
+import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.List;
 import java.util.UUID;
@@ -185,6 +186,35 @@ public class DoctorController {
         return "redirect:/";
     }
 
+    @GetMapping("/add-available-slot")
+    public String showAddAvailableSlotForm(Model model, HttpSession session) {
+        Doctor loggedInDoctor = (Doctor) session.getAttribute("loggedInDoctor");
+        if (loggedInDoctor == null) {
+            return "redirect:/doctor/login";
+        }
 
+        return "doctor/add-available-slot";
+    }
+
+    @PostMapping("/add-available-slot")
+    public String addAvailableSlot(@RequestParam("datetime") String datetime,
+                                   @RequestParam("address") String address,
+                                   HttpSession session, Model model) {
+        Doctor loggedInDoctor = (Doctor) session.getAttribute("loggedInDoctor");
+        if (loggedInDoctor == null) {
+            return "redirect:/doctor/login";
+        }
+
+        AvailableSlot slot = new AvailableSlot();
+        slot.setDatetime(LocalDateTime.parse(datetime));
+        slot.setAddress(address);
+        slot.setDoctor(loggedInDoctor);
+        slot.setReserved(false);
+
+        availableSlotRepository.save(slot);
+
+        model.addAttribute("doctor", loggedInDoctor);
+        return "doctor/doctor-profile";
+    }
 
 }

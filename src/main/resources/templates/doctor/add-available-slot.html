@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Available Slot</title>
+</head>
+<body>
+<h1>Add Available Slot</h1>
+
+<form action="/doctor/add-available-slot" method="post">
+    <label for="datetime">Date and Time:</label>
+    <input type="datetime-local" id="datetime" name="datetime" required>
+
+    <label for="address">Address:</label>
+    <input type="text" id="address" name="address" required>
+
+    <button type="submit">Add Slot</button>
+</form>
+
+<a href="/doctor/profile"><button>Back to Profile</button></a>
+</body>
+</html>
