@@ -15,6 +15,8 @@
         <flyway.version>9.22.3</flyway.version>
         <postgresql.version>42.6.2</postgresql.version>
         <jakarta.persistence-api.version>3.1.0</jakarta.persistence-api.version>
+        <angus-mail.version>2.0.3</angus-mail.version>
+        <spring-dotenv.version>4.0.0</spring-dotenv.version>
     </properties>
 
     <dependencies>
@@ -50,6 +52,17 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
             <version>${spring-boot.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.angus</groupId>
+            <artifactId>angus-mail</artifactId>
+            <version>${angus-mail.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>me.paulschwarz</groupId>
+            <artifactId>spring-dotenv</artifactId>
+            <version>${spring-dotenv.version}</version>
         </dependency>
     </dependencies>
 

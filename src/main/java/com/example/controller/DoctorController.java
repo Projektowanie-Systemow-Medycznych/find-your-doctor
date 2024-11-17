@@ -40,6 +40,8 @@ public class DoctorController {
         if (loggedInDoctor == null) {
             return "redirect:/doctor/login";
         }
+        List<Comment> comments = commentRepository.findByDoctorOrderByTimestampDesc(loggedInDoctor);
+        model.addAttribute("comments", comments);
         model.addAttribute("doctor", loggedInDoctor);
         return "doctor/doctor-profile";
     }

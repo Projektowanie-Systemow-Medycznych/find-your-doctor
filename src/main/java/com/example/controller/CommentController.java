@@ -2,6 +2,7 @@ package com.example.controller;
 
 import com.example.model.Comment;
 import com.example.model.Doctor;
+import com.example.model.EmailSender;
 import com.example.model.User;
 import com.example.repository.CommentRepository;
 import com.example.repository.DoctorRepository;
@@ -12,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.BindingResult;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -24,6 +26,9 @@ public class CommentController {
 
     @Autowired
     private DoctorRepository doctorRepository;
+
+    @Autowired
+    EmailSender emailSender;
 
     @GetMapping("/add")
     public String showAddCommentForm(@RequestParam("doctor_id") UUID doctorId, Model model, HttpSession session) {
@@ -49,5 +54,25 @@ public class CommentController {
         commentRepository.save(comment);
 
         return "redirect:/";
+    }
+
+    @GetMapping("/report")
+    public String reportComment(@RequestParam("commentId") UUID commentId, Model model, HttpSession session) throws Exception {
+        Optional<Comment> comment = commentRepository.findById(commentId);
+        String message = comment.get().getCommentText() + "\n" +
+                "Reporting doctor: " + comment.get().getDoctor().getName() +
+                "\n Reported User: " + comment.get().getUser().getName();
+
+        emailSender.sendMail("Report Comment", message);
+
+        Doctor loggedInDoctor = (Doctor) session.getAttribute("loggedInDoctor");
+        if (loggedInDoctor == null) {
+            return "redirect:/doctor/login";
+        }
+        List<Comment> comments = commentRepository.findByDoctorOrderByTimestampDesc(loggedInDoctor);
+        model.addAttribute("comments", comments);
+        model.addAttribute("doctor", loggedInDoctor);
+        model.addAttribute("error", "email to administration has been send!");
+        return "doctor/doctor-profile";
     }
 }

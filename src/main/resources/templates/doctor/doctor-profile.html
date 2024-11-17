@@ -2,6 +2,65 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>Doctor Profile</title>
+  <style>
+    /* Add CSS styles for the comments section */
+    .comments-container {
+        margin-top: 40px;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        height: 300px; /* Fixed height */
+        overflow-y: auto; /* Enable vertical scrolling */
+        background-color: #f9f9f9; /* Optional: Background color */
+    }
+    .comments-container::-webkit-scrollbar {
+        width: 8px;
+    }
+    .comments-container::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 4px;
+    }
+    .comments-container::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 4px;
+    }
+    .comments-container::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+    /* For Firefox */
+    .comments-container {
+        scrollbar-width: thin;
+        scrollbar-color: #888 #f1f1f1;
+    }
+    .comment {
+        border-bottom: 1px solid #eee;
+        padding: 10px 0;
+    }
+    .comment:last-child {
+        border-bottom: none;
+    }
+    .comment-author {
+        font-weight: bold;
+        margin-right: 10px;
+    }
+    .comment-rating {
+        color: #FFD700;
+        margin-left: 10px;
+    }
+    .no-comments {
+        font-style: italic;
+        color: #666;
+    }
+    .add-comment-button {
+        margin-top: 20px;
+        padding: 10px 15px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 3px;
+    }
+  </style>
 </head>
 <body>
 <header>
@@ -24,6 +83,29 @@
 </div>
 
 <a href="/doctor/add-available-slot"><button>Add Available Slot</button></a>
+
+<div class="comments-container">
+  <h2>Comments</h2>
+  <div th:if="${#lists.isEmpty(comments)}" class="no-comments">
+    <p>No comments yet.</p>
+  </div>
+  <div th:each="comment : ${comments}" class="comment">
+    <p>
+      <span class="comment-author" th:text="${comment.user.name}">User Name</span>
+      <span class="comment-rating">
+        <span th:each="i : ${#numbers.sequence(1, 5)}">
+          <span th:text="${i <= comment.rating} ? '★' : '☆'"></span>
+        </span>
+        (<span th:text="${comment.rating}">0</span>/5)
+      </span>
+    </p>
+    <p th:text="${comment.commentText}">Comment text</p>
+
+    <a th:href="@{/comment/report(commentId=${comment.id})}">
+      <button class="add-comment-button">Report Comment</button>
+    </a>
+  </div>
+</div>
 
 </body>
 </html>
