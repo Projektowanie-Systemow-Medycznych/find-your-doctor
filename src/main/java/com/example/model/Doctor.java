@@ -11,7 +11,7 @@ public class Doctor {
     @Column(updatable = false, nullable = false)
     private UUID id;
 
-    @OneToOne(fetch=FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "picture_id")
     private Picture picture;
 
@@ -49,5 +49,13 @@ public class Doctor {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Picture getPicture() {
+        return picture;
+    }
+
+    public void setPicture(Picture picture) {
+        this.picture = picture;
     }
 }

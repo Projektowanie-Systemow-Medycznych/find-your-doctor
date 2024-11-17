@@ -54,6 +54,13 @@
             </span>
         </span>
 
+        <div th:if="${doctor.picture != null}">
+            <img th:src="@{'/pictures/' + ${doctor.picture.id}}" alt="Doctor Picture" width="100" height="100" />
+        </div>
+        <div th:if="${doctor.picture == null}">
+            No picture
+        </div>
+
         <div class="action-buttons">
             <a th:href="@{/doctor/reservation(doctor_id=${doctor.id})}"><button>View Profile and Schedule</button></a>
             <a th:href="@{/comment/add(doctor_id=${doctor.id})}" th:if="${session.loggedInUser != null}">
