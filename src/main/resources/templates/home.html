@@ -1,7 +1,23 @@
+<!-- src/main/resources/templates/home.html -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Home Page</title>
+    <style>
+        .doctor-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .doctor-item {
+            margin-bottom: 15px;
+        }
+
+        .rating {
+            color: #FFD700;
+            margin-left: 10px;
+        }
+    </style>
 </head>
 <body>
 <header>
@@ -13,9 +29,22 @@
 <h1>Welcome to the Application</h1>
 
 <h2>List of Doctors</h2>
-<ul>
-    <li th:each="doctor : ${doctors}">
+<ul class="doctor-list">
+    <li class="doctor-item" th:each="doctor : ${doctors}">
         <span th:text="${doctor.name}"></span>
+
+        <span class="rating">
+            <span th:if="${averageRatings[doctor.id] != null}">
+                <span th:text="${#numbers.formatDecimal(averageRatings[doctor.id], 1, 1)} + ' / 5'"></span>
+                <span th:each="i : ${#numbers.sequence(1, 5)}">
+                    <span th:text="${i <= averageRatings[doctor.id] ? '★' : '☆'}"></span>
+                </span>
+            </span>
+            <span th:if="${averageRatings[doctor.id] == null}">
+                No ratings yet
+            </span>
+        </span>
+
         <a th:href="@{/doctor/reservation(doctor_id=${doctor.id})}"><button>View Available Slots</button></a>
     </li>
 </ul>
