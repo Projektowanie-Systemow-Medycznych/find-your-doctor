@@ -23,16 +23,24 @@ public class HomeController {
     public String showHomePage(Model model) {
         List<Doctor> doctors = doctorRepository.findAll();
 
-        List<Object[]> averageRatings = commentRepository.findAverageRatingsByDoctor();
+        List<Object[]> averageRatingsAndCounts = commentRepository.findAverageRatingsAndCountsByDoctor();
         Map<UUID, Double> doctorAverageRatings = new HashMap<>();
-        for (Object[] row : averageRatings) {
+        Map<UUID, Long> doctorCommentCounts = new HashMap<>();
+        for (Object[] row : averageRatingsAndCounts) {
             UUID doctorId = (UUID) row[0];
             Double avgRating = (Double) row[1];
+            Long count = (Long) row[2];
             doctorAverageRatings.put(doctorId, avgRating);
+            doctorCommentCounts.put(doctorId, count);
+        }
+
+        for (Doctor doctor : doctors) {
+            doctorCommentCounts.putIfAbsent(doctor.getId(), 0L);
         }
 
         model.addAttribute("doctors", doctors);
         model.addAttribute("averageRatings", doctorAverageRatings);
+        model.addAttribute("commentCounts", doctorCommentCounts);
 
         return "home";
     }

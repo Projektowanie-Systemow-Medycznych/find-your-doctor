@@ -8,6 +8,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface CommentRepository extends JpaRepository<Comment, UUID> {
-    @Query("SELECT c.doctor.id, AVG(c.rating) FROM Comment c GROUP BY c.doctor.id")
-    List<Object[]> findAverageRatingsByDoctor();
+    @Query("SELECT c.doctor.id, AVG(c.rating), COUNT(c) FROM Comment c GROUP BY c.doctor.id")
+    List<Object[]> findAverageRatingsAndCountsByDoctor();
 }

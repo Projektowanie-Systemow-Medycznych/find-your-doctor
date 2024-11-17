@@ -1,3 +1,4 @@
+<!-- src/main/resources/templates/home.html -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -46,6 +47,7 @@
                 <span th:each="i : ${#numbers.sequence(1, 5)}">
                     <span th:text="${i <= averageRatings[doctor.id] ? '★' : '☆'}"></span>
                 </span>
+                <span th:text="'(' + ${commentCounts[doctor.id]} + ' opinions)'"></span>
             </span>
             <span th:if="${averageRatings[doctor.id] == null}">
                 No ratings yet
@@ -58,7 +60,7 @@
                 <button>Add Comment</button>
             </a>
             <a th:href="@{/user/login}" th:if="${session.loggedInUser == null}">
-                <button>Login to Comment</button>
+                <button>Add Comment</button>
             </a>
         </div>
     </li>
