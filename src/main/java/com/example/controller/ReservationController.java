@@ -72,7 +72,7 @@ public class ReservationController {
         model.addAttribute("availableSlots", availableSlotsDay);
         model.addAttribute("date", date);
         model.addAttribute("isLogged", isLogged);
-        return "doctor/doctor-available-slot-day";
+        return "user/doctor-available-slot-day";
     }
 
     @PostMapping("/reserve")
@@ -89,7 +89,7 @@ public class ReservationController {
             model.addAttribute("isLogged", false);
             model.addAttribute("date", date);
             model.addAttribute("error", "To reserve visit you have to be logged in!");
-            return "doctor/doctor-available-slot-day";
+            return "user/doctor-available-slot-day";
         }
 
         AvailableSlot slot = availableSlotRepository.findById(slotId).orElse(null);

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Slots</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f6f7f8;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #0d1f33;
+            padding: 5px 0;
+            margin: 0;
+        }
+
+        .header {
+            padding: 0;
+            margin: 0;
+        }
+
+        .header img {
+            width: 80px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        nav {
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin: 0 10px;
+            padding: 0;
+        }
+
+        nav ul li a, nav ul li button {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            line-height: 1;
+            margin: 0;
+            padding: 0;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        nav ul li a:hover, nav ul li button:hover {
+            color: #bddfff;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        button {
+            background-color: #0d1f33;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #0b1a2b;
+        }
+
+        table {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        table th, table td {
+            padding: 12px 15px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table thead {
+            background-color: #06223b;
+        }
+
+        table thead th {
+            color: #fff;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+
+        table tbody tr:hover {
+            background-color: #e0effb;
+        }
+
+        .highlight {
+            background-color: #f2f2f2;
+        }
+
+        .nav-button {
+            padding: 10px 20px;
+            background-color: #0d1f33;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin: 5px;
+            border-radius: 4px;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            width: 90%;
+            margin: 20px auto;
+        }
+
+        .date {
+            font-size: 24px;
+            display: block;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .comments-container {
+            width: 90%;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            height: 300px;
+            overflow-y: auto;
+            background-color: #f9f9f9;
+        }
+
+        .comment {
+            border-bottom: 1px solid #eee;
+            padding: 10px 0;
+        }
+
+        .comment:last-child {
+            border-bottom: none;
+        }
+
+        .comment-author {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .comment-rating {
+            color: #FFD700;
+            margin-left: 10px;
+        }
+
+        .no-comments {
+            font-style: italic;
+            color: #666;
+        }
+
+        .add-comment-button {
+            margin-top: 20px;
+            padding: 10px 15px;
+            background-color: #0d1f33;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 12px;
+            color: #626576;
+            margin: 80px auto 32px auto;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="header">
+        <a th:href="@{/}">
+            <img th:src="@{/images/logo.png}" alt="Application Logo">
+        </a>
+    </div>
+    <nav>
+        <ul>
+            <li th:if="${session.loggedInUser == null}">
+                <a th:href="@{/user/login}">Login</a>
+            </li>
+            <li th:if="${session.loggedInUser != null}">
+                <a th:href="@{/user/profile}">View Profile</a>
+            </li>
+            <li th:if="${session.loggedInUser != null}">
+                <a th:href="@{/user/logout}">Logout</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<div class="container">
+    <h1>Available Slots for <span th:text="${date}">Date</span></h1>
+
+    <div th:if="${#lists.isEmpty(availableSlots)}">
+        <p>No available slots for this day.</p>
+    </div>
+
+    <table th:if="${!#lists.isEmpty(availableSlots)}">
+        <thead>
+        <tr>
+            <th>Date and Time</th>
+            <th>Address</th>
+            <th>Doctor Name</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="availableSlot : ${availableSlots}">
+            <td th:text="${availableSlot.datetime}">Available Slot Date</td>
+            <td th:text="${availableSlot.address}">Available Slot Address</td>
+            <td th:text="${availableSlot.doctor.name}">Doctor Name</td>
+            <td>
+                <form th:action="@{/doctor/reserve}" method="post">
+                    <input type="hidden" name="slotId" th:value="${availableSlot.id}" />
+                    <input type="hidden" name="date" th:value="${date}" />
+                    <button type="submit">Reserve</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div th:if="${error}">
+        <p th:text="${error}" style="color:red; text-align: center;"></p>
+    </div>
+</div>
+
+<footer>
+    <div>Copyright © 2024 Find Your Doctor. All Rights Reserved</div>
+</footer>
+</body>
+</html>
