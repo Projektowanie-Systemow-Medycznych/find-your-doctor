@@ -1,4 +1,3 @@
-<!-- src/main/resources/templates/home.html -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -16,6 +15,14 @@
         .rating {
             color: #FFD700;
             margin-left: 10px;
+        }
+
+        .action-buttons {
+            margin-top: 5px;
+        }
+
+        .action-buttons button {
+            margin-right: 5px;
         }
     </style>
 </head>
@@ -45,7 +52,15 @@
             </span>
         </span>
 
-        <a th:href="@{/doctor/reservation(doctor_id=${doctor.id})}"><button>View Available Slots</button></a>
+        <div class="action-buttons">
+            <a th:href="@{/doctor/reservation(doctor_id=${doctor.id})}"><button>View Available Slots</button></a>
+            <a th:href="@{/comment/add(doctor_id=${doctor.id})}" th:if="${session.loggedInUser != null}">
+                <button>Add Comment</button>
+            </a>
+            <a th:href="@{/user/login}" th:if="${session.loggedInUser == null}">
+                <button>Login to Comment</button>
+            </a>
+        </div>
     </li>
 </ul>
 

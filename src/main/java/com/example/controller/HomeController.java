@@ -1,4 +1,3 @@
-// src/main/java/com/example/controller/HomeController.java
 package com.example.controller;
 
 import com.example.model.Doctor;

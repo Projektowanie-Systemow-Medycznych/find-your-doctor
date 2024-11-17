@@ -24,7 +24,7 @@ public class Comment {
 
     private String commentText;
 
-    private int rating;
+    private Integer rating;
 
     private LocalDateTime timestamp;
 
@@ -52,11 +52,11 @@ public class Comment {
         this.user = user;
     }
 
-    public int getRating() {
+    public Integer getRating() {
         return rating;
     }
 
-    public void setRating(int rating) {
+    public void setRating(Integer rating) {
         this.rating = rating;
     }
 

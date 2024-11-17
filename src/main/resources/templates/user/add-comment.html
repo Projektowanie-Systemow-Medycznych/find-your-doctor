@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Add Comment</title>
+  <style>
+    .form-container {
+        width: 50%;
+        margin: auto;
+    }
+
+    .form-field {
+        margin-bottom: 15px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    input, textarea, select {
+        width: 100%;
+        padding: 8px;
+        box-sizing: border-box;
+    }
+
+    .submit-button {
+        text-align: center;
+    }
+  </style>
+</head>
+<body>
+<div class="form-container">
+  <h1>Add Comment</h1>
+  <form th:action="@{/comment/add}" th:object="${comment}" method="post">
+    <input type="hidden" th:field="*{doctor.id}" />
+
+    <div class="form-field">
+      <label for="doctorName">Doctor:</label>
+      <input type="text" id="doctorName" th:value="${comment.doctor.name}" readonly />
+    </div>
+
+    <div class="form-field">
+      <label for="rating">Rating (1 to 5):</label>
+      <select id="rating" th:field="*{rating}" required>
+        <option value="" disabled th:selected="${comment.rating == null}">Select a rating</option>
+        <option th:each="i : ${#numbers.sequence(1,5)}" th:value="${i}" th:text="${i}"></option>
+      </select>
+    </div>
+
+    <div class="form-field">
+      <label for="commentText">Comment:</label>
+      <textarea id="commentText" th:field="*{commentText}" rows="5"></textarea>
+    </div>
+
+    <div class="submit-button">
+      <button type="submit">Submit Comment</button>
+    </div>
+  </form>
+</div>
+</body>
+</html>
