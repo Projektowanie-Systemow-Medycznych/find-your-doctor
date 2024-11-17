@@ -107,5 +107,9 @@
   </div>
 </div>
 
+<div th:if="${error}">
+  <p th:text="${error}" style="color:red; text-align: center;"></p>
+</div>
+
 </body>
 </html>

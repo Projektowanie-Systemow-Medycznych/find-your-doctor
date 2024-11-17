@@ -63,7 +63,8 @@ public class CommentController {
                 "Reporting doctor: " + comment.get().getDoctor().getName() +
                 "\n Reported User: " + comment.get().getUser().getName();
 
-        emailSender.sendMail("Report Comment", message);
+
+        //emailSender.sendMail("Report Comment", message);
 
         Doctor loggedInDoctor = (Doctor) session.getAttribute("loggedInDoctor");
         if (loggedInDoctor == null) {
@@ -72,7 +73,7 @@ public class CommentController {
         List<Comment> comments = commentRepository.findByDoctorOrderByTimestampDesc(loggedInDoctor);
         model.addAttribute("comments", comments);
         model.addAttribute("doctor", loggedInDoctor);
-        model.addAttribute("error", "email to administration has been send!");
+        model.addAttribute("error", "Email to administration has been send!");
         return "doctor/doctor-profile";
     }
 }
