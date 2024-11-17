@@ -99,6 +99,7 @@ public class DoctorController {
         loggedInDoctor.setName(doctor.getName());
         loggedInDoctor.setLogin(doctor.getLogin());
         loggedInDoctor.setPassword(doctor.getPassword());
+        loggedInDoctor.setDescription(doctor.getDescription());
         doctorRepository.save(loggedInDoctor);
         session.setAttribute("loggedInDoctor", loggedInDoctor);
         return "redirect:/doctor";

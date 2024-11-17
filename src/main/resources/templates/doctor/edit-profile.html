@@ -20,8 +20,8 @@
   <input type="text" id="password" name="password" th:value="${doctor.password}" required>
   <br><br>
 
-  <label for="description">New Password:</label>
-  <input type="text" id="description" name="description" th:value="${doctor.description}" required>
+  <label for="description">Description:</label>
+  <textarea th:field="*{description}" id="description" rows="5" cols="50" required></textarea>
   <br><br>
 
   <label for="file">Update Picture:</label>

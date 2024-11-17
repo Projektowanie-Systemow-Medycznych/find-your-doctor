@@ -97,9 +97,10 @@
 </head>
 <body>
 <div>
-    <h1>Available Slots Calendar for <span th:text="${doctorName}">Doctor Name</span></h1>
-    <a href="/"><button class="nav-button">Back to Home Page</button></a>
+    <h1><span th:text="${doctorName}">Doctor Name</span> Schedule</h1>
 </div>
+
+<span th:text="${doctor.description}"></span>
 
 <div th:if="${doctor.picture != null}">
     <img th:src="@{'/pictures/' + ${doctor.picture.id}}" alt="Doctor Picture" width="100" height="100" />
