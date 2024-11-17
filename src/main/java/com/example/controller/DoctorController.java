@@ -133,7 +133,7 @@ public class DoctorController {
 
         List<Comment> comments = commentRepository.findByDoctorOrderByTimestampDesc(doctor);
         model.addAttribute("comments", comments);
-
+        model.addAttribute("doctor", doctor);
         model.addAttribute("availableSlots", availableSlotDates);
         model.addAttribute("currentYear", currentYear);
         model.addAttribute("currentMonth", currentMonth);
