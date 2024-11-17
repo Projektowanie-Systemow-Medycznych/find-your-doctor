@@ -35,7 +35,12 @@
 </header>
 
 <h1>Welcome to the Application</h1>
-
+<div>
+    <form th:action="@{/}" method="get">
+        <input type="text" name="searchTerm" placeholder="Search doctors..." th:value="${searchTerm}" />
+        <button type="submit">Search</button>
+    </form>
+</div>
 <h2>List of Doctors</h2>
 <ul class="doctor-list">
     <li class="doctor-item" th:each="doctor : ${doctors}">

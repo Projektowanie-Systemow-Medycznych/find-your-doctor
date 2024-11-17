@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 public class HomeController {
@@ -23,6 +24,7 @@ public class HomeController {
     @GetMapping("/")
     public String showHomePage(Model model, @RequestParam(value = "searchTerm", required = false) String searchTerm) {
         List<Doctor> doctors = doctorRepository.findAll();
+        doctors = filterDoctors(doctors, searchTerm);
 
         List<Object[]> averageRatingsAndCounts = commentRepository.findAverageRatingsAndCountsByDoctor();
         Map<UUID, Double> doctorAverageRatings = new HashMap<>();
@@ -40,9 +42,23 @@ public class HomeController {
         }
 
         model.addAttribute("doctors", doctors);
+        model.addAttribute("searchTerm", searchTerm);
         model.addAttribute("averageRatings", doctorAverageRatings);
         model.addAttribute("commentCounts", doctorCommentCounts);
 
         return "home";
+    }
+
+    private List<Doctor> filterDoctors(List<Doctor> doctors, String searchTerm) {
+        if (searchTerm == null || searchTerm.trim().isEmpty()) {
+            return doctors;
+        }
+
+        String lowerCaseSearchTerm = searchTerm.toLowerCase();
+
+        return doctors.stream()
+                .filter(doctor -> (doctor.getName() != null && doctor.getName().toLowerCase().contains(lowerCaseSearchTerm)) ||
+                        (doctor.getDescription() != null && doctor.getDescription().toLowerCase().contains(lowerCaseSearchTerm)))
+                .collect(Collectors.toList());
     }
 }
