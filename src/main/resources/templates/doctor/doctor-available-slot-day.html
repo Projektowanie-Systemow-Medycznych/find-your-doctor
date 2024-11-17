@@ -6,6 +6,15 @@
     <title>availableSlots</title>
 </head>
 <body>
+<header>
+    <nav>
+        <ul>
+            <li th:if="${!isLogged}">
+                <a th:href="@{/user/login}">Login</a>
+            </li>
+        </ul>
+    </nav>
+</header>
 <h1>availableSlots for <span th:text="${date}">Data</span></h1>
 <ul>
     <li th:if="${#lists.isEmpty(availableSlots)}">No availableSlots for this day.</li>
@@ -15,10 +24,15 @@
         <p>Doctor name: <span th:text="${availableSlot.doctor.name}">Doctor Name</span></p>
         <form th:action="@{/doctor/reserve}" method="post">
             <input type="hidden" name="slotId" th:value="${availableSlot.id}" />
+            <input type="hidden" name="date" th:value="${date}" />
             <button type="submit">Reserve</button>
         </form>
     </li>
 </ul>
-<!--<a href="/user/reservation">Back to Calendar</a>-->
+
+<div th:if="${error}">
+    <p th:text="${error}" style="color:red; text-align: center;"></p>
+</div>
+
 </body>
 </html>

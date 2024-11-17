@@ -17,6 +17,7 @@ import jakarta.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -116,11 +117,6 @@ public class DoctorController {
 
     @GetMapping("/reservation")
     public String showDoctorAvailableSlots(Model model, HttpSession session, @RequestParam("doctor_id") UUID doctor_id) {
-        User loggedInUser = (User) session.getAttribute("loggedInUser");
-        if (loggedInUser == null) {
-            return "redirect:/user/login";
-        }
-
         Doctor doctor = doctorRepository.findById(doctor_id).orElse(null);
 
         List<AvailableSlot> availableSlots  = availableSlotRepository.findByDoctor(doctor);
@@ -137,7 +133,6 @@ public class DoctorController {
         model.addAttribute("availableSlots", availableSlotDates);
         model.addAttribute("currentYear", currentYear);
         model.addAttribute("currentMonth", currentMonth);
-        model.addAttribute("user", loggedInUser);
         model.addAttribute("doctorId", doctor.getId());
         return "doctor/doctor-available-slot";
     }
@@ -145,9 +140,7 @@ public class DoctorController {
     @GetMapping("/reservation/day")
     public String showAvailableSlots(@RequestParam("date") String date, Model model, HttpSession session, @RequestParam("id") UUID doctor_id) {
         User loggedInUser = (User) session.getAttribute("loggedInUser");
-        if (loggedInUser == null) {
-            return "redirect:/user/login";
-        }
+        boolean isLogged = loggedInUser != null;
         Doctor doctor = doctorRepository.findById(doctor_id).orElse(null);
 
         List<AvailableSlot> availableSlots = availableSlotRepository.findByDoctor(doctor);
@@ -159,14 +152,25 @@ public class DoctorController {
 
         model.addAttribute("availableSlots", availableSlotsDay);
         model.addAttribute("date", date);
+        model.addAttribute("isLogged", isLogged);
         return "doctor/doctor-available-slot-day";
     }
 
     @PostMapping("/reserve")
-    public String reserveSlot(@RequestParam("slotId") UUID slotId, HttpSession session, Model model) {
+    public String reserveSlot(@RequestParam("slotId") UUID slotId, @RequestParam("date") String date, HttpSession session, Model model) {
         User loggedInUser = (User) session.getAttribute("loggedInUser");
         if (loggedInUser == null) {
-            return "redirect:/user/login";
+            Optional<AvailableSlot> slotTemp = availableSlotRepository.findById(slotId);
+            List<AvailableSlot> availableSlots = availableSlotRepository.findByDoctor(slotTemp.get().getDoctor());
+            List<AvailableSlot> availableSlotsDay = availableSlots.stream()
+                    .filter(slot -> !slot.isReserved())
+                    .filter(availableSlot -> availableSlot.getDatetime().toLocalDate().toString().equals(date))
+                    .collect(Collectors.toList());
+            model.addAttribute("availableSlots", availableSlotsDay);
+            model.addAttribute("isLogged", false);
+            model.addAttribute("date", date);
+            model.addAttribute("error", "To reserve visit you have to be logged in!");
+            return "doctor/doctor-available-slot-day";
         }
 
         AvailableSlot slot = availableSlotRepository.findById(slotId).orElse(null);
