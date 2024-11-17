@@ -53,6 +53,10 @@
             font-weight: bold;
             margin-right: 10px;
         }
+        .comment-rating {
+            color: #FFD700;
+            margin-left: 10px;
+        }
         .no-comments {
             font-style: italic;
             color: #666;
@@ -101,9 +105,15 @@
     </div>
     <div th:each="comment : ${comments}" class="comment">
         <p>
-            <span class="comment-author" th:text="${comment.user.name}">User Name</span>:
-            <span th:text="${comment.commentText}">Comment text</span>
+            <span class="comment-author" th:text="${comment.user.name}">User Name</span>
+            <span class="comment-rating">
+                <span th:each="i : ${#numbers.sequence(1, 5)}">
+                    <span th:text="${i <= comment.rating} ? '★' : '☆'"></span>
+                </span>
+                (<span th:text="${comment.rating}">0</span>/5)
+            </span>
         </p>
+        <p th:text="${comment.commentText}">Comment text</p>
     </div>
     <a th:href="@{/comment/add(doctor_id=${doctorId})}" th:if="${session.loggedInUser != null}">
         <button class="add-comment-button">Add Comment</button>
