@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>availableSlots</title>
+</head>
+<body>
+<h1>availableSlots for <span th:text="${date}">Data</span></h1>
+<ul>
+    <li th:if="${#lists.isEmpty(availableSlots)}">No availableSlots for this day.</li>
+    <li th:each="availableSlot : ${availableSlots}">
+        <p>Date: <span th:text="${availableSlot.datetime}">availableSlots Date</span></p>
+        <p>Address: <span th:text="${availableSlot.address}">availableSlots Address</span></p>
+        <p>Doctor name: <span th:text="${availableSlot.doctor.name}">Doctor Name</span></p>
+        <form th:action="@{/doctor/reserve}" method="post">
+            <input type="hidden" name="slotId" th:value="${availableSlot.id}" />
+            <button type="submit">Reserve</button>
+        </form>
+    </li>
+</ul>
+<!--<a href="/user/reservation">Back to Calendar</a>-->
+</body>
+</html>
