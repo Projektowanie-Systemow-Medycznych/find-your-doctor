@@ -1,10 +1,8 @@
 package com.example.controller;
 
-import com.example.model.AvailableSlot;
-import com.example.model.Doctor;
-import com.example.model.Reservation;
-import com.example.model.User;
+import com.example.model.*;
 import com.example.repository.AvailableSlotRepository;
+import com.example.repository.CommentRepository;
 import com.example.repository.DoctorRepository;
 import com.example.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +29,9 @@ public class DoctorController {
     private ReservationRepository reservationRepository;
     @Autowired
     private AvailableSlotRepository availableSlotRepository;
+    @Autowired
+    private CommentRepository commentRepository;
+
 
     @GetMapping()
     public String showDoctorProfile(Model model, HttpSession session) {
@@ -119,7 +120,7 @@ public class DoctorController {
     public String showDoctorAvailableSlots(Model model, HttpSession session, @RequestParam("doctor_id") UUID doctor_id) {
         Doctor doctor = doctorRepository.findById(doctor_id).orElse(null);
 
-        List<AvailableSlot> availableSlots  = availableSlotRepository.findByDoctor(doctor);
+        List<AvailableSlot> availableSlots = availableSlotRepository.findByDoctor(doctor);
 
         YearMonth currentYearMonth = YearMonth.now();
         int currentYear = currentYearMonth.getYear();
@@ -130,13 +131,17 @@ public class DoctorController {
                 .map(availableSlot -> availableSlot.getDatetime().toLocalDate().toString())
                 .collect(Collectors.toList());
 
+        List<Comment> comments = commentRepository.findByDoctorOrderByTimestampDesc(doctor);
+        model.addAttribute("comments", comments);
+
         model.addAttribute("availableSlots", availableSlotDates);
         model.addAttribute("currentYear", currentYear);
         model.addAttribute("currentMonth", currentMonth);
         model.addAttribute("doctorId", doctor.getId());
+        model.addAttribute("doctorName", doctor.getName());
+
         return "doctor/doctor-available-slot";
     }
-
     @GetMapping("/reservation/day")
     public String showAvailableSlots(@RequestParam("date") String date, Model model, HttpSession session, @RequestParam("id") UUID doctor_id) {
         User loggedInUser = (User) session.getAttribute("loggedInUser");

@@ -55,7 +55,7 @@
         </span>
 
         <div class="action-buttons">
-            <a th:href="@{/doctor/reservation(doctor_id=${doctor.id})}"><button>View Available Slots</button></a>
+            <a th:href="@{/doctor/reservation(doctor_id=${doctor.id})}"><button>View Profile and Schedule</button></a>
             <a th:href="@{/comment/add(doctor_id=${doctor.id})}" th:if="${session.loggedInUser != null}">
                 <button>Add Comment</button>
             </a>

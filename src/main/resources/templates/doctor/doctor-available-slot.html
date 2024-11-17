@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calendar</title>
+    <title>Available Slots Calendar</title>
     <style>
         table {
             width: 100%;
             border-collapse: collapse;
+            margin-top: 20px;
         }
         th, td {
             border: 1px solid #ddd;
@@ -23,6 +24,7 @@
             color: white;
             border: none;
             cursor: pointer;
+            margin: 5px;
         }
         .nav-container {
             display: flex;
@@ -30,15 +32,46 @@
             margin-top: 10px;
         }
         .date {
-            font-size: 30px;
+            font-size: 24px;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .comments-container {
+            margin-top: 40px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .comment {
+            border-bottom: 1px solid #eee;
+            padding: 10px 0;
+        }
+        .comment:last-child {
+            border-bottom: none;
+        }
+        .comment-author {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .no-comments {
+            font-style: italic;
+            color: #666;
+        }
+        .add-comment-button {
+            margin-top: 20px;
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 3px;
         }
     </style>
 </head>
 <body>
 <div>
-    <h1>Available slots Calendar</h1>
-    <span id="current-month-year" class="date"></span>
-    <a href="/"><button>Back to home page</button></a>
+    <h1>Available Slots Calendar for <span th:text="${doctorName}">Doctor Name</span></h1>
+    <a href="/"><button class="nav-button">Back to Home Page</button></a>
 </div>
 <table>
     <thead>
@@ -53,7 +86,6 @@
     </tr>
     </thead>
     <tbody id="calendar-body">
-    <!-- Calendar days will be inserted here by JavaScript -->
     </tbody>
 </table>
 
@@ -62,23 +94,40 @@
     <button class="nav-button" id="next-month-button">Next Month</button>
 </div>
 
+<div class="comments-container">
+    <h2>Comments</h2>
+    <div th:if="${#lists.isEmpty(comments)}" class="no-comments">
+        <p>No comments yet.</p>
+    </div>
+    <div th:each="comment : ${comments}" class="comment">
+        <p>
+            <span class="comment-author" th:text="${comment.user.name}">User Name</span>:
+            <span th:text="${comment.commentText}">Comment text</span>
+        </p>
+    </div>
+    <a th:href="@{/comment/add(doctor_id=${doctorId})}" th:if="${session.loggedInUser != null}">
+        <button class="add-comment-button">Add Comment</button>
+    </a>
+    <a th:href="@{/user/login}" th:if="${session.loggedInUser == null}">
+        <button class="add-comment-button">Add Comment</button>
+    </a>
+</div>
+
 <form id="day-form" action="/doctor/reservation/day" method="get" style="display: none;">
     <input type="hidden" id="selected-date" name="date">
     <input type="hidden" id="doctor-id" name="id">
 </form>
 
 <script th:inline="javascript">
+    /*<![CDATA[*/
     let currentYear = /*[[${currentYear}]]*/ 2024;
-    let currentMonth = /*[[${currentMonth}]]*/ 10; // October (0-based index) October is 9
+    let currentMonth = /*[[${currentMonth}]]*/ 10; // November (0-based index)
     const availableSlots = /*[[${availableSlots}]]*/ [];
-    const doctorId = /*[[${doctorId}]]*/ 1;
-
-    //console.log(currentYear);
-    //console.log(currentMonth);
-    //console.log(availableSlots);
+    const doctorId = /*[[${doctorId}]]*/ '1'; // Replace '1' with actual doctorId string if needed
 
     function updateMonthYearDisplay(year, month) {
-        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        const monthNames = ["January", "February", "March", "April", "May", "June",
+                            "July", "August", "September", "October", "November", "December"];
         document.getElementById('current-month-year').textContent = `${monthNames[month]} ${year}`;
     }
 
@@ -89,30 +138,34 @@
         const daysInMonth = new Date(year, month + 1, 0).getDate();
         let date = 1;
 
-        for (let i = 0; i < 6; i++) {
+        for (let i = 0; i < 6; i++) { // Up to 6 weeks
             const row = document.createElement('tr');
 
-            for (let j = 0; j < 7; j++) {
+            for (let j = 0; j < 7; j++) { // 7 days a week
                 const cell = document.createElement('td');
                 if (i === 0 && j < firstDay) {
                     cell.innerHTML = '';
                 } else if (date > daysInMonth) {
-                    break;
+                    cell.innerHTML = '';
                 } else {
                     cell.innerHTML = date;
-                    const reservationDate = new Date(year, month, date+1).toISOString().split('T')[0];
+                    const reservationDate = new Date(year, month, date).toISOString().split('T')[0];
 
                     if (availableSlots.includes(reservationDate)) {
                         cell.classList.add('highlight');
-                        //console.log(reservationDate);
-                       //console.log(availableSlots);
-                        //console.log(date);
+                        cell.style.cursor = 'pointer';
+                    } else {
+                        cell.style.cursor = 'default';
                     }
-                    cell.addEventListener('click', () => {
-                        document.getElementById('selected-date').value = reservationDate;
-                        document.getElementById('doctor-id').value = doctorId;
-                        document.getElementById('day-form').submit();
-                    });
+
+                    if (availableSlots.includes(reservationDate)) {
+                        cell.addEventListener('click', () => {
+                            document.getElementById('selected-date').value = reservationDate;
+                            document.getElementById('doctor-id').value = doctorId;
+                            document.getElementById('day-form').submit();
+                        });
+                    }
+
                     date++;
                 }
                 row.appendChild(cell);
@@ -140,9 +193,8 @@
         generateCalendar(currentYear, currentMonth, availableSlots);
     });
 
-    // Example availableSlots array
-    // const availableSlots = ['2024-10-15', '2024-10-20'];
     generateCalendar(currentYear, currentMonth, availableSlots);
+    /*]]>*/
 </script>
 </body>
 </html>
