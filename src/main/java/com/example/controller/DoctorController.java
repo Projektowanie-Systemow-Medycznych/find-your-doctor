@@ -1,17 +1,16 @@
 package com.example.controller;
 
 import com.example.model.*;
-import com.example.repository.AvailableSlotRepository;
-import com.example.repository.CommentRepository;
-import com.example.repository.DoctorRepository;
-import com.example.repository.ReservationRepository;
+import com.example.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpSession;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.List;
@@ -31,6 +30,8 @@ public class DoctorController {
     private AvailableSlotRepository availableSlotRepository;
     @Autowired
     private CommentRepository commentRepository;
+    @Autowired
+    private PictureRepository pictureRepository;
 
 
     @GetMapping()
@@ -81,11 +82,20 @@ public class DoctorController {
     }
 
     @PostMapping("/edit-profile")
-    public String updateDoctorProfile(@ModelAttribute("doctor") Doctor doctor, HttpSession session) {
+    public String updateDoctorProfile(@ModelAttribute("doctor") Doctor doctor, HttpSession session,
+                                      @RequestParam("file") MultipartFile file) throws IOException {
         Doctor loggedInDoctor = (Doctor) session.getAttribute("loggedInDoctor");
         if (loggedInDoctor == null) {
             return "redirect:/doctor/login";
         }
+
+        if (!file.isEmpty()) {
+            Picture p =new Picture();
+            p.setData(file.getBytes());
+            Picture updatedPicture = pictureRepository.save(p);
+            loggedInDoctor.setPicture(updatedPicture);
+        }
+
         loggedInDoctor.setName(doctor.getName());
         loggedInDoctor.setLogin(doctor.getLogin());
         loggedInDoctor.setPassword(doctor.getPassword());
