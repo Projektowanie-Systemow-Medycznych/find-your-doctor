@@ -11,6 +11,10 @@ public class Doctor {
     @Column(updatable = false, nullable = false)
     private UUID id;
 
+    @OneToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "picture_id")
+    private Picture picture;
+
     private String login;
     private String password;
     private String name;
