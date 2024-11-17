@@ -1,83 +1,257 @@
-<!-- src/main/resources/templates/home.html -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Home Page</title>
     <style>
-        .doctor-list {
-            list-style-type: none;
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f6f7f8;
+            color: #333;
+            margin: 0;
             padding: 0;
         }
 
-        .doctor-item {
-            margin-bottom: 15px;
+        header {
+            background-color: #0d1f33;
+            padding: 5px 0;
+            margin: 0;
+        }
+
+        .header {
+            padding: 0;
+            margin: 0;
+        }
+
+        .header img {
+            width: 80px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        nav {
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin: 0 10px;
+            padding: 0;
+        }
+
+        nav ul li a, nav ul li button {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            line-height: 1;
+            margin: 0;
+            padding: 0;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        nav ul li a:hover, nav ul li button:hover {
+            color: #bddfff;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .search-container {
+            padding: 20px;
+            border-radius: 10px;
+            width: 70%;
+            max-width: 600px;
+            margin: 20px auto;
+        }
+
+        .search-container form {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .search-input {
+            width: 60%;
+            padding: 8px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .search-button {
+            background-color: #0d1f33;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .search-button:hover {
+            background-color: #0b1a2b;
+        }
+
+        button {
+            background-color: #0d1f33;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #0b1a2b;
+        }
+
+        table {
+            width: 90%;
+            margin: 0 auto 40px auto;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        table th, table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table thead {
+            background-color: #06223b;
+        }
+
+        table thead th {
+            color: #fff;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+
+        table tbody tr:hover {
+            background-color: #e0effb;
         }
 
         .rating {
             color: #FFD700;
-            margin-left: 10px;
         }
 
-        .action-buttons {
-            margin-top: 5px;
+        .action-buttons a {
+            margin-right: 10px;
         }
 
-        .action-buttons button {
-            margin-right: 5px;
+        footer {
+            text-align: center;
+            font-size: 12px;
+            color: #626576;
+            margin: 80px auto 32px auto;
         }
     </style>
 </head>
 <body>
 <header>
-    <a href="/user/login" th:if="${session.loggedInUser == null}"><button>Login</button></a>
-    <a href="/user/profile" th:if="${session.loggedInUser != null}"><button>View Profile</button></a>
-    <a href="/user/logout" th:if="${session.loggedInUser != null}"><button>Log Out</button></a>
+    <div class="header">
+        <a th:href="@{/}">
+            <img th:src="@{/images/logo.png}" alt="Application Logo">
+        </a>
+    </div>
+    <nav>
+        <ul>
+            <li th:if="${session.loggedInUser == null}">
+                <a th:href="@{/user/login}">Login</a>
+            </li>
+            <li th:if="${session.loggedInUser != null}">
+                <a th:href="@{/user/profile}">View Profile</a>
+            </li>
+            <li th:if="${session.loggedInUser != null}">
+                <a th:href="@{/user/logout}">Logout</a>
+            </li>
+        </ul>
+    </nav>
 </header>
 
-<h1>Welcome to the Application</h1>
-<div>
-    <form th:action="@{/}" method="get">
-        <input type="text" name="searchTerm" placeholder="Search doctors..." th:value="${searchTerm}" />
-        <button type="submit">Search</button>
-    </form>
+<div class="container">
+
+    <div class="search-container">
+        <form th:action="@{/}" method="get">
+            <input type="text" name="searchTerm" placeholder="Search doctors..." th:value="${searchTerm}" class="search-input" />
+            <button type="submit" class="search-button">Search</button>
+        </form>
+    </div>
+
+    <table>
+<!--        <thead>-->
+<!--        <tr>-->
+<!--            <th>Picture</th>-->
+<!--            <th>Name</th>-->
+<!--            <th>Description</th>-->
+<!--            <th>Rating</th>-->
+<!--            <th>Actions</th>-->
+<!--        </tr>-->
+<!--        </thead>-->
+        <tbody>
+        <tr th:each="doctor : ${doctors}">
+            <td>
+                <div th:if="${doctor.picture != null}">
+                    <img th:src="@{'/pictures/' + ${doctor.picture.id}}" alt="Doctor Picture" width="100" height="100" />
+                </div>
+                <div th:if="${doctor.picture == null}">
+                    No picture
+                </div>
+            </td>
+            <td th:text="${doctor.name}"></td>
+            <td th:text="${doctor.description}"></td>
+            <td>
+                <div class="rating">
+                    <div th:if="${averageRatings[doctor.id] != null}">
+                        <span th:text="${#numbers.formatDecimal(averageRatings[doctor.id], 1, 1)} + ' / 5'"></span>
+                        <span th:each="i : ${#numbers.sequence(1, 5)}">
+                                <span th:text="${i <= averageRatings[doctor.id] ? '★' : '☆'}"></span>
+                            </span>
+                        <span th:text="'(' + ${commentCounts[doctor.id]} + ' opinions)'"></span>
+                    </div>
+                    <div th:if="${averageRatings[doctor.id] == null}">
+                        No ratings yet
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="action-buttons">
+                    <a th:href="@{/doctor/reservation(doctor_id=${doctor.id})}">
+                        <button>View Profile and Schedule</button>
+                    </a>
+                    <a th:href="@{/comment/add(doctor_id=${doctor.id})}" th:if="${session.loggedInUser != null}">
+                        <button>Add Comment</button>
+                    </a>
+                    <a th:href="@{/user/login}" th:if="${session.loggedInUser == null}">
+                        <button>Add Comment</button>
+                    </a>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 </div>
-<h2>List of Doctors</h2>
-<ul class="doctor-list">
-    <li class="doctor-item" th:each="doctor : ${doctors}">
-        <span th:text="${doctor.name}"></span>
-        <span th:text="${doctor.description}"></span>
 
-        <span class="rating">
-            <span th:if="${averageRatings[doctor.id] != null}">
-                <span th:text="${#numbers.formatDecimal(averageRatings[doctor.id], 1, 1)} + ' / 5'"></span>
-                <span th:each="i : ${#numbers.sequence(1, 5)}">
-                    <span th:text="${i <= averageRatings[doctor.id] ? '★' : '☆'}"></span>
-                </span>
-                <span th:text="'(' + ${commentCounts[doctor.id]} + ' opinions)'"></span>
-            </span>
-            <span th:if="${averageRatings[doctor.id] == null}">
-                No ratings yet
-            </span>
-        </span>
-
-        <div th:if="${doctor.picture != null}">
-            <img th:src="@{'/pictures/' + ${doctor.picture.id}}" alt="Doctor Picture" width="100" height="100" />
-        </div>
-        <div th:if="${doctor.picture == null}">
-            No picture
-        </div>
-
-        <div class="action-buttons">
-            <a th:href="@{/doctor/reservation(doctor_id=${doctor.id})}"><button>View Profile and Schedule</button></a>
-            <a th:href="@{/comment/add(doctor_id=${doctor.id})}" th:if="${session.loggedInUser != null}">
-                <button>Add Comment</button>
-            </a>
-            <a th:href="@{/user/login}" th:if="${session.loggedInUser == null}">
-                <button>Add Comment</button>
-            </a>
-        </div>
-    </li>
-</ul>
-
+<footer>
+    <div>Copyright © 2024 Find Your Doctor. All Rights Reserved</div>
+</footer>
 </body>
 </html>
