@@ -14,7 +14,10 @@
 
 <h2>List of Doctors</h2>
 <ul>
-    <li th:each="doctor : ${doctors}" th:text="${doctor.name}"></li>
+    <li th:each="doctor : ${doctors}">
+        <span th:text="${doctor.name}"></span>
+        <a th:href="@{/doctor/reservation(doctor_id=${doctor.id})}"><button>View Available Slots</button></a>
+    </li>
 </ul>
 
 </body>

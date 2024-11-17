@@ -1,6 +1,8 @@
 package com.example.controller;
 
+import com.example.model.Reservation;
 import com.example.model.User;
+import com.example.repository.ReservationRepository;
 import com.example.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,12 +11,18 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpSession;
 
+import java.time.YearMonth;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Controller
 @RequestMapping("/user")
 public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private ReservationRepository reservationRepository;
 
     @GetMapping("/login")
     public String showUserLoginPage() {
@@ -98,4 +106,45 @@ public class UserController {
         userRepository.save(user);
         return "redirect:/user/login";
     }
+
+    @GetMapping("/reservation")
+    public String showUserReservation(Model model, HttpSession session) {
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            return "redirect:/user/login";
+        }
+        List<Reservation> reservations  = reservationRepository.findByUser(loggedInUser);
+
+        YearMonth currentYearMonth = YearMonth.now();
+        int currentYear = currentYearMonth.getYear();
+        int currentMonth = currentYearMonth.getMonthValue() - 1;
+
+        List<String> reservationDates = reservations.stream()
+                .map(reservation -> reservation.getSlot().getDatetime().toLocalDate().toString())
+                .collect(Collectors.toList());
+
+        model.addAttribute("reservations", reservationDates);
+        model.addAttribute("currentYear", currentYear);
+        model.addAttribute("currentMonth", currentMonth);
+        model.addAttribute("user", loggedInUser);
+        return "user/user-reservation";
+    }
+
+    @GetMapping("/reservation/day")
+    public String showReservationsForDay(@RequestParam("date") String date, Model model, HttpSession session) {
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            return "redirect:/user/login";
+        }
+        List<Reservation> reservations = reservationRepository.findByUser(loggedInUser);
+
+        List<Reservation> reservationsForDay = reservations.stream()
+                .filter(reservation -> reservation.getSlot().getDatetime().toLocalDate().toString().equals(date))
+                .collect(Collectors.toList());
+
+        model.addAttribute("reservations", reservationsForDay);
+        model.addAttribute("date", date);
+        return "user/user-reservation-day";
+    }
+
 }
