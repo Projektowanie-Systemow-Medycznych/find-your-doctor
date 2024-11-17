@@ -5,240 +5,364 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Available Slots Calendar</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f6f7f8;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #0d1f33;
+            padding: 5px 0;
+            margin: 0;
+        }
+
+        .header {
+            padding: 0;
+            margin: 0;
+        }
+
+        .header img {
+            width: 80px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        nav {
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin: 0 10px;
+            padding: 0;
+        }
+
+        nav ul li a, nav ul li button {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            line-height: 1;
+            margin: 0;
+            padding: 0;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        nav ul li a:hover, nav ul li button:hover {
+            color: #bddfff;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        button {
+            background-color: #0d1f33;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #0b1a2b;
+        }
+
         table {
-            width: 100%;
+            width: 90%;
+            margin: 20px auto;
             border-collapse: collapse;
-            margin-top: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
+
+        table th, table td {
+            padding: 12px 15px;
             text-align: center;
+            border-bottom: 1px solid #ddd;
         }
+
+        table thead {
+            background-color: #06223b;
+        }
+
+        table thead th {
+            color: #fff;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+
+        table tbody tr:hover {
+            background-color: #e0effb;
+        }
+
         .highlight {
             background-color: #f2f2f2;
         }
+
         .nav-button {
             padding: 10px 20px;
-            background-color: #007bff;
+            background-color: #0d1f33;
             color: white;
             border: none;
             cursor: pointer;
             margin: 5px;
+            border-radius: 4px;
         }
+
         .nav-container {
             display: flex;
             justify-content: space-between;
             margin-top: 10px;
         }
+
         .date {
             font-size: 24px;
             display: block;
             margin-bottom: 10px;
-            text-align: center; /* Center the month and year */
+            text-align: center;
         }
+
         .comments-container {
             margin-top: 40px;
             padding: 20px;
             border: 1px solid #ddd;
             border-radius: 5px;
-            height: 300px; /* Fixed height */
-            overflow-y: auto; /* Enable vertical scrolling */
-            background-color: #f9f9f9; /* Optional: Background color */
+            height: 300px;
+            overflow-y: auto;
+            background-color: #f9f9f9;
         }
-        .comments-container::-webkit-scrollbar {
-            width: 8px;
-        }
-        .comments-container::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 4px;
-        }
-        .comments-container::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 4px;
-        }
-        .comments-container::-webkit-scrollbar-thumb:hover {
-            background: #555;
-        }
-        /* For Firefox */
-        .comments-container {
-            scrollbar-width: thin;
-            scrollbar-color: #888 #f1f1f1;
-        }
+
         .comment {
             border-bottom: 1px solid #eee;
             padding: 10px 0;
         }
+
         .comment:last-child {
             border-bottom: none;
         }
+
         .comment-author {
             font-weight: bold;
             margin-right: 10px;
         }
+
         .comment-rating {
             color: #FFD700;
             margin-left: 10px;
         }
+
         .no-comments {
             font-style: italic;
             color: #666;
         }
+
         .add-comment-button {
             margin-top: 20px;
             padding: 10px 15px;
-            background-color: #28a745;
+            background-color: #0d1f33;
             color: white;
             border: none;
             cursor: pointer;
-            border-radius: 3px;
+            border-radius: 4px;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 12px;
+            color: #626576;
+            margin: 80px auto 32px auto;
         }
     </style>
 </head>
 <body>
-<div>
-    <h1><span th:text="${doctorName}">Doctor Name</span> Schedule</h1>
-</div>
-
-<span th:text="${doctor.description}"></span>
-
-<div th:if="${doctor.picture != null}">
-    <img th:src="@{'/pictures/' + ${doctor.picture.id}}" alt="Doctor Picture" width="100" height="100" />
-</div>
-<div th:if="${doctor.picture == null}">
-    No picture
-</div>
-
-<div class="date" id="current-month-year"></div>
-
-<table>
-    <thead>
-    <tr>
-        <th>Mon</th>
-        <th>Tue</th>
-        <th>Wed</th>
-        <th>Thu</th>
-        <th>Fri</th>
-        <th>Sat</th>
-        <th>Sun</th>
-    </tr>
-    </thead>
-    <tbody id="calendar-body">
-    </tbody>
-</table>
-
-<div class="nav-container">
-    <button class="nav-button" id="prev-month-button">Previous Month</button>
-    <button class="nav-button" id="next-month-button">Next Month</button>
-</div>
-
-<div class="comments-container">
-    <h2>Comments</h2>
-    <div th:if="${#lists.isEmpty(comments)}" class="no-comments">
-        <p>No comments yet.</p>
+<header>
+    <div class="header">
+        <a th:href="@{/}">
+            <img th:src="@{/images/logo.png}" alt="Application Logo">
+        </a>
     </div>
-    <div th:each="comment : ${comments}" class="comment">
-        <p>
-            <span class="comment-author" th:text="${comment.user.name}">User Name</span>
-            <span class="comment-rating">
+    <nav>
+        <ul>
+            <li th:if="${session.loggedInUser == null}">
+                <a th:href="@{/user/login}">Login</a>
+            </li>
+            <li th:if="${session.loggedInUser != null}">
+                <a th:href="@{/user/profile}">View Profile</a>
+            </li>
+            <li th:if="${session.loggedInUser != null}">
+                <a th:href="@{/user/logout}">Logout</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<div class="container">
+    <div>
+        <h1><span th:text="${doctorName}">Doctor Name</span></h1>
+    </div>
+
+    <span th:text="${doctor.description}"></span>
+
+    <div th:if="${doctor.picture != null}">
+        <img th:src="@{'/pictures/' + ${doctor.picture.id}}" alt="Doctor Picture" width="200" height="200" />
+    </div>
+    <div th:if="${doctor.picture == null}">
+        No picture
+    </div>
+
+    <div class="date" id="current-month-year"></div>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Mon</th>
+            <th>Tue</th>
+            <th>Wed</th>
+            <th>Thu</th>
+            <th>Fri</th>
+            <th>Sat</th>
+            <th>Sun</th>
+        </tr>
+        </thead>
+        <tbody id="calendar-body">
+        </tbody>
+    </table>
+
+    <div class="nav-container">
+        <button class="nav-button" id="prev-month-button">Previous Month</button>
+        <button class="nav-button" id="next-month-button">Next Month</button>
+    </div>
+
+    <div class="comments-container">
+        <h2>Comments</h2>
+        <div th:if="${#lists.isEmpty(comments)}" class="no-comments">
+            <p>No comments yet.</p>
+        </div>
+        <div th:each="comment : ${comments}" class="comment">
+            <p>
+                <span class="comment-author" th:text="${comment.user.name}">User Name</span>
+                <span class="comment-rating">
                     <span th:each="i : ${#numbers.sequence(1, 5)}">
                         <span th:text="${i <= comment.rating} ? '★' : '☆'"></span>
                     </span>
                     (<span th:text="${comment.rating}">0</span>/5)
                 </span>
-        </p>
-        <p th:text="${comment.commentText}">Comment text</p>
+            </p>
+            <p th:text="${comment.commentText}">Comment text</p>
+        </div>
+        <a th:href="@{/comment/add(doctor_id=${doctorId})}" th:if="${session.loggedInUser != null}">
+            <button class="add-comment-button">Add Comment</button>
+        </a>
+        <a th:href="@{/user/login}" th:if="${session.loggedInUser == null}">
+            <button class="add-comment-button">Add Comment</button>
+        </a>
     </div>
-    <a th:href="@{/comment/add(doctor_id=${doctorId})}" th:if="${session.loggedInUser != null}">
-        <button class="add-comment-button">Add Comment</button>
-    </a>
-    <a th:href="@{/user/login}" th:if="${session.loggedInUser == null}">
-        <button class="add-comment-button">Add Comment</button>
-    </a>
+
+    <form id="day-form" action="/doctor/reservation/day" method="get" style="display: none;">
+        <input type="hidden" id="selected-date" name="date">
+        <input type="hidden" id="doctor-id" name="id">
+    </form>
+
+    <script th:inline="javascript">
+        let currentYear = /*[[${currentYear}]]*/ 2024;
+        let currentMonth = /*[[${currentMonth}]]*/ 10;
+        const availableSlots = /*[[${availableSlots}]]*/ [];
+        const doctorId = /*[[${doctorId}]]*/ '1';
+
+        function updateMonthYearDisplay(year, month) {
+            const monthNames = ["January", "February", "March", "April", "May", "June",
+                                "July", "August", "September", "October", "November", "December"];
+            document.getElementById('current-month-year').textContent = `${monthNames[month]} ${year}`;
+        }
+
+        function generateCalendar(year, month, availableSlots) {
+            const calendarBody = document.getElementById('calendar-body');
+            calendarBody.innerHTML = '';
+            const firstDay = (new Date(year, month).getDay() + 6) % 7;
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            let date = 1;
+
+            for (let i = 0; i < 6; i++) {
+                const row = document.createElement('tr');
+
+                for (let j = 0; j < 7; j++) {
+                    const cell = document.createElement('td');
+                    if (i === 0 && j < firstDay) {
+                        cell.innerHTML = '';
+                    } else if (date > daysInMonth) {
+                        cell.innerHTML = '';
+                    } else {
+                        cell.innerHTML = date;
+                        const reservationDate = new Date(year, month, date).toISOString().split('T')[0];
+
+                        if (availableSlots.includes(reservationDate)) {
+                            cell.classList.add('highlight');
+                            cell.style.cursor = 'pointer';
+                        } else {
+                            cell.style.cursor = 'default';
+                        }
+
+                        if (availableSlots.includes(reservationDate)) {
+                            cell.addEventListener('click', () => {
+                                document.getElementById('selected-date').value = reservationDate;
+                                document.getElementById('doctor-id').value = doctorId;
+                                document.getElementById('day-form').submit();
+                            });
+                        }
+
+                        date++;
+                    }
+                    row.appendChild(cell);
+                }
+                calendarBody.appendChild(row);
+            }
+            updateMonthYearDisplay(year, month);
+        }
+
+        document.getElementById('next-month-button').addEventListener('click', () => {
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            generateCalendar(currentYear, currentMonth, availableSlots);
+        });
+
+        document.getElementById('prev-month-button').addEventListener('click', () => {
+            currentMonth--;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            generateCalendar(currentYear, currentMonth, availableSlots);
+        });
+
+        generateCalendar(currentYear, currentMonth, availableSlots);
+    </script>
 </div>
 
-<form id="day-form" action="/doctor/reservation/day" method="get" style="display: none;">
-    <input type="hidden" id="selected-date" name="date">
-    <input type="hidden" id="doctor-id" name="id">
-</form>
-
-<script th:inline="javascript">
-    /*<![CDATA[*/
-    let currentYear = /*[[${currentYear}]]*/ 2024;
-    let currentMonth = /*[[${currentMonth}]]*/ 10; // November (0-based index)
-    const availableSlots = /*[[${availableSlots}]]*/ [];
-    const doctorId = /*[[${doctorId}]]*/ '1'; // Replace '1' with actual doctorId string if needed
-
-    function updateMonthYearDisplay(year, month) {
-        const monthNames = ["January", "February", "March", "April", "May", "June",
-                            "July", "August", "September", "October", "November", "December"];
-        document.getElementById('current-month-year').textContent = `${monthNames[month]} ${year}`;
-    }
-
-    function generateCalendar(year, month, availableSlots) {
-        const calendarBody = document.getElementById('calendar-body');
-        calendarBody.innerHTML = '';
-        const firstDay = (new Date(year, month).getDay() + 6) % 7; // Adjust to start from Monday
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
-        let date = 1;
-
-        for (let i = 0; i < 6; i++) { // Up to 6 weeks
-            const row = document.createElement('tr');
-
-            for (let j = 0; j < 7; j++) { // 7 days a week
-                const cell = document.createElement('td');
-                if (i === 0 && j < firstDay) {
-                    cell.innerHTML = '';
-                } else if (date > daysInMonth) {
-                    cell.innerHTML = '';
-                } else {
-                    cell.innerHTML = date;
-                    const reservationDate = new Date(year, month, date).toISOString().split('T')[0];
-
-                    if (availableSlots.includes(reservationDate)) {
-                        cell.classList.add('highlight');
-                        cell.style.cursor = 'pointer';
-                    } else {
-                        cell.style.cursor = 'default';
-                    }
-
-                    if (availableSlots.includes(reservationDate)) {
-                        cell.addEventListener('click', () => {
-                            document.getElementById('selected-date').value = reservationDate;
-                            document.getElementById('doctor-id').value = doctorId;
-                            document.getElementById('day-form').submit();
-                        });
-                    }
-
-                    date++;
-                }
-                row.appendChild(cell);
-            }
-            calendarBody.appendChild(row);
-        }
-        updateMonthYearDisplay(year, month);
-    }
-
-    document.getElementById('next-month-button').addEventListener('click', () => {
-        currentMonth++;
-        if (currentMonth > 11) {
-            currentMonth = 0;
-            currentYear++;
-        }
-        generateCalendar(currentYear, currentMonth, availableSlots);
-    });
-
-    document.getElementById('prev-month-button').addEventListener('click', () => {
-        currentMonth--;
-        if (currentMonth < 0) {
-            currentMonth = 11;
-            currentYear--;
-        }
-        generateCalendar(currentYear, currentMonth, availableSlots);
-    });
-
-    generateCalendar(currentYear, currentMonth, availableSlots);
-    /*]]>*/
-</script>
+<footer>
+    <div>Copyright © 2024 Find Your Doctor. All Rights Reserved</div>
+</footer>
 </body>
 </html>
