@@ -18,6 +18,7 @@ public class Doctor {
     private String login;
     private String password;
     private String name;
+    private String description;
 
     public UUID getId() {
         return id;
@@ -57,5 +58,13 @@ public class Doctor {
 
     public void setPicture(Picture picture) {
         this.picture = picture;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

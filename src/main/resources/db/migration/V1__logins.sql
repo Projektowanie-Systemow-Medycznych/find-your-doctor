@@ -8,7 +8,8 @@ CREATE TABLE doctor (
      picture_id UUID REFERENCES Picture(id),
      login TEXT,
      password TEXT,
-     name TEXT
+     name TEXT,
+     description TEXT
 );
 
 CREATE TABLE "user" (

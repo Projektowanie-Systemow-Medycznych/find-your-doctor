@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.*;
 
@@ -20,7 +21,7 @@ public class HomeController {
     private CommentRepository commentRepository;
 
     @GetMapping("/")
-    public String showHomePage(Model model) {
+    public String showHomePage(Model model, @RequestParam(value = "searchTerm", required = false) String searchTerm) {
         List<Doctor> doctors = doctorRepository.findAll();
 
         List<Object[]> averageRatingsAndCounts = commentRepository.findAverageRatingsAndCountsByDoctor();

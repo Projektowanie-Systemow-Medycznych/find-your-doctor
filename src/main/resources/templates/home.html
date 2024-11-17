@@ -40,6 +40,7 @@
 <ul class="doctor-list">
     <li class="doctor-item" th:each="doctor : ${doctors}">
         <span th:text="${doctor.name}"></span>
+        <span th:text="${doctor.description}"></span>
 
         <span class="rating">
             <span th:if="${averageRatings[doctor.id] != null}">
