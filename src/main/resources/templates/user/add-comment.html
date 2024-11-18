@@ -1,11 +1,64 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Add Comment</title>
   <style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f6f7f8;
+        color: #333;
+        margin: 0;
+        padding: 0;
+    }
+
+    header {
+        background-color: #0d1f33;
+        padding: 5px 0;
+    }
+
+    .header img {
+        width: 80px;
+        height: auto;
+        display: block;
+        margin: 0 auto;
+    }
+
+    nav ul {
+        list-style: none;
+        display: flex;
+        justify-content: flex-end;
+        padding: 0;
+        margin: 0;
+    }
+
+    nav ul li {
+        margin: 0 10px;
+    }
+
+    nav ul li a {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    nav ul li a:hover {
+        color: #bddfff;
+    }
+
     .form-container {
-        width: 50%;
-        margin: auto;
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        max-width: 500px;
+        margin: 50px auto;
+    }
+
+    h1 {
+        text-align: center;
+        color: #0d1f33;
     }
 
     .form-field {
@@ -15,20 +68,73 @@
     label {
         display: block;
         margin-bottom: 5px;
+        font-weight: bold;
     }
 
     input, textarea, select {
         width: 100%;
-        padding: 8px;
-        box-sizing: border-box;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: #f9f9f9;
+        font-size: 14px;
+    }
+
+    input:focus, textarea:focus, select:focus {
+        border-color: #0d1f33;
+        background-color: #fff;
+        outline: none;
     }
 
     .submit-button {
         text-align: center;
+        margin-top: 20px;
+    }
+
+    button {
+        background-color: #0d1f33;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #0b1a2b;
+    }
+
+    footer {
+        text-align: center;
+        font-size: 12px;
+        color: #626576;
+        margin: 40px auto;
     }
   </style>
 </head>
 <body>
+<header>
+  <div class="header">
+    <a th:href="@{/}">
+      <img th:src="@{/images/logo.png}" alt="Application Logo">
+    </a>
+  </div>
+  <nav>
+    <ul>
+      <li th:if="${session.loggedInUser == null}">
+        <a th:href="@{/user/login}">Login</a>
+      </li>
+      <li th:if="${session.loggedInUser != null}">
+        <a th:href="@{/user/profile}">View Profile</a>
+      </li>
+      <li th:if="${session.loggedInUser != null}">
+        <a th:href="@{/user/logout}">Logout</a>
+      </li>
+    </ul>
+  </nav>
+</header>
+
 <div class="form-container">
   <h1>Add Comment</h1>
   <form th:action="@{/comment/add}" th:object="${comment}" method="post">
@@ -57,5 +163,9 @@
     </div>
   </form>
 </div>
+
+<footer>
+  <div>Copyright © 2024 Find Your Doctor. All Rights Reserved</div>
+</footer>
 </body>
 </html>

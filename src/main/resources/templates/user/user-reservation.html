@@ -3,43 +3,153 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calendar</title>
+    <title>Appointment Calendar</title>
     <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f6f7f8;
+            color: #333;
+            margin: 0;
+            padding: 0;
         }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
+
+        header {
+            background-color: #0d1f33;
+            padding: 5px 0;
+        }
+
+        .header img {
+            width: 80px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin: 0 10px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        nav ul li a:hover {
+            color: #bddfff;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px auto;
+            width: 90%;
+        }
+
+        h1 {
             text-align: center;
+            color: #0d1f33;
+            margin: 20px 0;
         }
+
+        .date {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: #0d1f33;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #0b1a2b;
+        }
+
+        table {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        table th, table td {
+            padding: 12px 15px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table thead {
+            background-color: #06223b;
+        }
+
+        table thead th {
+            color: #fff;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+
+        table tbody tr:hover {
+            background-color: #e0effb;
+        }
+
         .highlight {
             background-color: #f2f2f2;
         }
-        .nav-button {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
+
         .nav-container {
             display: flex;
             justify-content: space-between;
-            margin-top: 10px;
+            width: 90%;
+            margin: 20px auto;
         }
-        .date {
-            font-size: 30px;
+
+        footer {
+            text-align: center;
+            font-size: 12px;
+            color: #626576;
+            margin: 80px auto 32px auto;
         }
     </style>
 </head>
 <body>
-<div>
+<header>
+    <div class="header">
+        <a href="/">
+            <img src="/images/logo.png" alt="Application Logo">
+        </a>
+    </div>
+    <nav>
+        <ul>
+            <li><a href="/user/profile">Profile</a></li>
+            <li><a href="/user/logout">Logout</a></li>
+        </ul>
+    </nav>
+</header>
+
+<div class="container">
     <h1>Appointment Calendar</h1>
-    <span id="current-month-year" class="date"></span>
+    <div class="date" id="current-month-year"></div>
     <a href="/user/profile"><button>Back to Profile</button></a>
 </div>
+
 <table>
     <thead>
     <tr>
@@ -66,24 +176,25 @@
     <input type="hidden" id="selected-date" name="date">
 </form>
 
+<footer>
+    <div>Copyright © 2024 Find Your Doctor. All Rights Reserved</div>
+</footer>
+
 <script th:inline="javascript">
     let currentYear = /*[[${currentYear}]]*/ 2024;
-    let currentMonth = /*[[${currentMonth}]]*/ 10; // October (0-based index) October is 9
+    let currentMonth = /*[[${currentMonth}]]*/ 10;
     const reservations = /*[[${reservations}]]*/ [];
 
-    //console.log(currentYear);
-    //console.log(currentMonth);
-    //console.log(reservations);
-
     function updateMonthYearDisplay(year, month) {
-        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        const monthNames = ["January", "February", "March", "April", "May", "June",
+                            "July", "August", "September", "October", "November", "December"];
         document.getElementById('current-month-year').textContent = `${monthNames[month]} ${year}`;
     }
 
     function generateCalendar(year, month, reservations) {
         const calendarBody = document.getElementById('calendar-body');
         calendarBody.innerHTML = '';
-        const firstDay = (new Date(year, month).getDay() + 6) % 7; // Adjust to start from Monday
+        const firstDay = (new Date(year, month).getDay() + 6) % 7;
         const daysInMonth = new Date(year, month + 1, 0).getDate();
         let date = 1;
 
@@ -98,13 +209,9 @@
                     break;
                 } else {
                     cell.innerHTML = date;
-                    const reservationDate = new Date(year, month, date+1).toISOString().split('T')[0];
-
+                    const reservationDate = new Date(year, month, date).toISOString().split('T')[0];
                     if (reservations.includes(reservationDate)) {
                         cell.classList.add('highlight');
-                        //console.log(reservationDate);
-                       //console.log(reservations);
-                        //console.log(date);
                     }
                     cell.addEventListener('click', () => {
                         document.getElementById('selected-date').value = reservationDate;
@@ -137,8 +244,6 @@
         generateCalendar(currentYear, currentMonth, reservations);
     });
 
-    // Example reservations array
-    // const reservations = ['2024-10-15', '2024-10-20'];
     generateCalendar(currentYear, currentMonth, reservations);
 </script>
 </body>

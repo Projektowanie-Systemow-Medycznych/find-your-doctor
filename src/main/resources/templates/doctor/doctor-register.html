@@ -2,33 +2,167 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>Doctor Registration</title>
+  <style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f6f7f8;
+        color: #333;
+        margin: 0;
+        padding: 0;
+    }
+
+    header {
+        background-color: #0d1f33;
+        padding: 5px 0;
+        margin: 0;
+    }
+
+    .header {
+        padding: 0;
+        margin: 0;
+    }
+
+    .header img {
+        width: 80px;
+        height: auto;
+        display: block;
+        margin: 0 auto;
+    }
+
+    nav {
+        margin: 0;
+        padding: 0;
+    }
+
+    nav ul {
+        list-style: none;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        margin: 0;
+        padding: 0;
+    }
+
+    nav ul li {
+        margin: 0 10px;
+        padding: 0;
+    }
+
+    nav ul li a, nav ul li button {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 14px;
+        line-height: 1;
+        margin: 0;
+        padding: 0;
+        background: none;
+        border: none;
+        cursor: pointer;
+    }
+
+    nav ul li a:hover, nav ul li button:hover {
+        color: #bddfff;
+    }
+
+    .container {
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 400px;
+        margin: 50px auto;
+    }
+
+    h1 {
+        text-align: center;
+        color: #0d1f33;
+        margin-bottom: 20px;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    label {
+        font-weight: bold;
+        color: #555;
+    }
+
+    input {
+        padding: 10px;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: #f9f9f9;
+        width: 100%;
+    }
+
+    input:focus {
+        outline: none;
+        border-color: #0d1f33;
+        background-color: #fff;
+    }
+
+    button {
+        background-color: #0d1f33;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        width: 100%;
+    }
+
+    button:hover {
+        background-color: #0b1a2b;
+    }
+
+    footer {
+        text-align: center;
+        font-size: 12px;
+        color: #626576;
+        margin: 40px 0 20px 0;
+    }
+  </style>
 </head>
 <body>
-<h1>Register as a Doctor</h1>
-
-<form th:action="@{/doctor/register}" method="post">
-  <div>
-    <label for="name">Name:</label>
-    <input type="text" id="name" name="name" required>
+<header>
+  <div class="header">
+    <a th:href="@{/}">
+      <img th:src="@{/images/logo.png}" alt="Application Logo">
+    </a>
   </div>
-  <br>
+</header>
 
-  <div>
-    <label for="login">Login:</label>
-    <input type="text" id="login" name="login" required>
-  </div>
-  <br>
+<div class="container">
+  <h1>Register a New Doctor Account</h1>
+  <form th:action="@{/doctor/register}" method="post">
+    <div>
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required>
+    </div>
+    <div>
+      <label for="login">Login:</label>
+      <input type="text" id="login" name="login" required>
+    </div>
+    <div>
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required>
+    </div>
+    <div>
+      <button type="submit">Register</button>
+    </div>
+  </form>
+</div>
 
-  <div>
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required>
-  </div>
-  <br>
-
-  <div>
-    <button type="submit">Register</button>
-  </div>
-</form>
-
+<footer>
+  <div>Copyright © 2024 Find Your Doctor. All Rights Reserved</div>
+</footer>
 </body>
 </html>
