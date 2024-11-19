@@ -58,6 +58,15 @@
         padding: 20px;
         border-radius: 8px;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .profile-container input[type="text"] {
+        width: 300px;
+        max-width: 100%;
     }
 
     form {
@@ -168,7 +177,7 @@
 <body>
 <header>
   <div class="header">
-    <a href="/">
+    <a href="/doctor">
       <img src="/images/logo.png" alt="Application Logo">
     </a>
   </div>
@@ -188,7 +197,6 @@
 
 <div class="profile-container">
   <form action="/doctor/profile" method="post" th:object="${doctor}">
-    <label for="name">Name:</label>
     <input type="text" id="name" name="name" th:value="${doctor.name}" readonly>
   </form>
 
