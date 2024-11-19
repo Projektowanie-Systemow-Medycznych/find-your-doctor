@@ -2,7 +2,7 @@ package com.example.controller;
 
 import com.example.model.Comment;
 import com.example.model.Doctor;
-import com.example.model.EmailSender;
+import com.example.service.EmailSender;
 import com.example.model.User;
 import com.example.repository.CommentRepository;
 import com.example.repository.DoctorRepository;

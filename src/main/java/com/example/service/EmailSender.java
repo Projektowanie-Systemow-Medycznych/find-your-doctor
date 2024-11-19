@@ -1,4 +1,4 @@
-package com.example.model;
+package com.example.service;
 
 import java.util.Properties;
 
