@@ -2,29 +2,190 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>Doctor Login</title>
+  <style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f6f7f8;
+        color: #333;
+        margin: 0;
+        padding: 0;
+    }
+
+    header {
+        background-color: #0d1f33;
+        padding: 5px 0;
+        margin: 0;
+    }
+
+    .header {
+        padding: 0;
+        margin: 0;
+    }
+
+    .header img {
+        width: 80px;
+        height: auto;
+        display: block;
+        margin: 0 auto;
+    }
+
+    nav {
+        margin: 0;
+        padding: 0;
+    }
+
+    nav ul {
+        list-style: none;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        margin: 0;
+        padding: 0;
+    }
+
+    nav ul li {
+        margin: 0 10px;
+        padding: 0;
+    }
+
+    nav ul li a, nav ul li button {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 14px;
+        line-height: 1;
+        margin: 0;
+        padding: 0;
+        background: none;
+        border: none;
+        cursor: pointer;
+    }
+
+    nav ul li a:hover, nav ul li button:hover {
+        color: #bddfff;
+    }
+
+    .container {
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 400px;
+        margin: 50px auto;
+    }
+
+    h1 {
+        text-align: center;
+        color: #0d1f33;
+        margin-bottom: 20px;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    label {
+        font-weight: bold;
+        color: #555;
+    }
+
+    input {
+        padding: 10px;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: #f9f9f9;
+        width: 100%;
+    }
+
+    input:focus {
+        outline: none;
+        border-color: #0d1f33;
+        background-color: #fff;
+    }
+
+    button {
+        background-color: #0d1f33;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        width: 100%;
+    }
+
+    button:hover {
+        background-color: #0b1a2b;
+    }
+
+    .error-message {
+        color: red;
+        font-size: 14px;
+        text-align: center;
+    }
+
+    .register-link {
+        text-align: center;
+        margin-top: 15px;
+    }
+
+    .register-link a {
+        text-decoration: none;
+        color: #0d1f33;
+        font-weight: bold;
+    }
+
+    .register-link a:hover {
+        color: #0b1a2b;
+    }
+
+    footer {
+        text-align: center;
+        font-size: 12px;
+        color: #626576;
+        margin: 40px 0 20px 0;
+    }
+  </style>
 </head>
 <body>
-<h1>Doctor Login</h1>
-<form th:action="@{/doctor/login}" method="post">
-  <div>
-    <label>Login:</label>
-    <input type="text" name="login" />
+<header>
+  <div class="header">
+    <a th:href="@{/}">
+      <img th:src="@{/images/logo.png}" alt="Application Logo">
+    </a>
   </div>
-  <div>
-    <label>Password:</label>
-    <input type="password" name="password" />
-  </div>
-  <div>
-    <button type="submit">Login</button>
-  </div>
-  <div th:if="${error}">
-    <p th:text="${error}" style="color:red;"></p>
-  </div>
-</form>
+</header>
+
+<div class="container">
+  <h1>Doctor Login</h1>
+  <form th:action="@{/doctor/login}" method="post">
+    <div>
+      <label for="login">Login:</label>
+      <input type="text" id="login" name="login" required />
+    </div>
+    <div>
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required />
+    </div>
+    <div>
+      <button type="submit">Login</button>
+    </div>
+    <div th:if="${error}" class="error-message">
+      <p th:text="${error}"></p>
+    </div>
+  </form>
 
 <div>
-  <a href="/doctor/register"><button>Register</button></a>
+  <p>Don't have an account? <a href="/doctor/register">Register</a></p>
 </div>
 
+<footer>
+  <div>Copyright © 2024 Find Your Doctor. All Rights Reserved</div>
+</footer>
 </body>
 </html>

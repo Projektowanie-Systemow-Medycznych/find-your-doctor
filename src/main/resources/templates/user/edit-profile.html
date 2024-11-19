@@ -1,31 +1,143 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>User Profile</title>
+  <title>Edit User Profile</title>
+  <style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f6f7f8;
+        color: #333;
+        margin: 0;
+        padding: 0;
+    }
+
+    header {
+        background-color: #0d1f33;
+        padding: 10px 0;
+    }
+
+    .header img {
+        width: 80px;
+        height: auto;
+        display: block;
+        margin: 0 auto;
+    }
+
+    nav ul {
+        list-style: none;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        margin: 0;
+        padding: 0;
+    }
+
+    nav ul li {
+        margin: 0 10px;
+    }
+
+    nav ul li a {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 14px;
+    }
+
+    nav ul li a:hover {
+        color: #bddfff;
+    }
+
+    h1 {
+        text-align: center;
+        color: #0d1f33;
+        margin: 30px 0;
+    }
+
+    .profile-container {
+        max-width: 600px;
+        margin: 0 auto;
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    label {
+        font-weight: bold;
+        color: #555;
+    }
+
+    input {
+        padding: 10px;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: #f9f9f9;
+    }
+
+    button {
+        background-color: #0d1f33;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s;
+    }
+
+    button:hover {
+        background-color: #0b1a2b;
+    }
+
+    footer {
+        text-align: center;
+        font-size: 12px;
+        color: #626576;
+        margin: 40px auto 20px auto;
+    }
+  </style>
 </head>
 <body>
 <header>
-  <a href="/"><button>Home</button></a>
+  <div class="header">
+    <a href="/">
+      <img src="/images/logo.png" alt="Application Logo">
+    </a>
+  </div>
+  <nav>
+    <ul>
+      <li><a href="/user/profile">Back to Profile</a></li>
+      <li><a href="/user/logout">Logout</a></li>
+    </ul>
+  </nav>
 </header>
 
-<h1>Your Profile</h1>
+<h1>Edit Your Profile</h1>
 
-<form action="/user/edit-profile" method="post" th:object="${user}">
+<div class="profile-container">
+  <form action="/user/edit-profile" method="post" th:object="${user}">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" th:value="${user.name}" required>
 
-  <label for="name">Name:</label>
-  <input type="text" id="name" name="name" th:value="${user.name}" required>
-  <br><br>
+    <label for="login">New Login:</label>
+    <input type="text" id="login" name="login" th:value="${user.login}" required>
 
-  <label for="login">New login:</label>
-  <input type="text" id="login" name="login" th:value="${user.login}" required>
-  <br><br>
+    <label for="password">New Password:</label>
+    <input type="password" id="password" name="password" required>
 
+    <button type="submit">Save Changes</button>
+  </form>
+</div>
 
-  <label for="password">New Password:</label>
-  <input type="text" id="password" name="password" th:value="${user.password}" required>
-  <br><br>
-
-  <button type="submit">Save Changes</button>
-</form>
+<footer>
+  <div>Copyright © 2024 Find Your Doctor. All Rights Reserved</div>
+</footer>
 </body>
 </html>

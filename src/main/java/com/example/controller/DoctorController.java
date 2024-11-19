@@ -155,7 +155,7 @@ public class DoctorController {
         availableSlotRepository.save(slot);
 
         model.addAttribute("doctor", loggedInDoctor);
-        return "doctor/doctor-profile";
+        return "redirect:/doctor";
     }
 
 }
