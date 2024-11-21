@@ -232,6 +232,7 @@
             <th>Date and Time</th>
             <th>Address</th>
             <th>Doctor Name</th>
+            <th>Price</th>
             <th>Action</th>
         </tr>
         </thead>
@@ -240,6 +241,7 @@
             <td th:text="${availableSlot.datetime}">Available Slot Date</td>
             <td th:text="${availableSlot.address}">Available Slot Address</td>
             <td th:text="${availableSlot.doctor.name}">Doctor Name</td>
+            <td th:text="${availableSlot.price}">Price</td>
             <td>
                 <form th:action="@{/doctor/reserve}" method="post">
                     <input type="hidden" name="slotId" th:value="${availableSlot.id}" />

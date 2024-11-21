@@ -140,6 +140,7 @@ public class DoctorController {
     @PostMapping("/add-available-slot")
     public String addAvailableSlot(@RequestParam("datetime") String datetime,
                                    @RequestParam("address") String address,
+                                   @RequestParam("price") String price,
                                    HttpSession session, Model model) {
         Doctor loggedInDoctor = (Doctor) session.getAttribute("loggedInDoctor");
         if (loggedInDoctor == null) {
@@ -151,6 +152,7 @@ public class DoctorController {
         slot.setAddress(address);
         slot.setDoctor(loggedInDoctor);
         slot.setReserved(false);
+        slot.setPrice(Float.parseFloat(price));
 
         availableSlotRepository.save(slot);
 

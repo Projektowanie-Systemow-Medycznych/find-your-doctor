@@ -136,7 +136,7 @@
     </nav>
 </header>
 
-<h1>Reservations for <span th:text="${date}">Date</span></h1>
+<h1>Reservations for: <span th:text="${date}"></span></h1>
 
 <div class="container">
     <div th:if="${#lists.isEmpty(reservations)}" class="no-reservations">
@@ -152,6 +152,9 @@
         </p>
         <p class="reservation-details">
             <span>Doctor name:</span> <span th:text="${reservation.slot.doctor.name}">Doctor Name</span>
+        </p>
+        <p class="reservation-details">
+            <span>Price:</span> <span th:text="${reservation.slot.price}">Price</span>
         </p>
     </div>
 

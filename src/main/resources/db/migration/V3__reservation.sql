@@ -3,7 +3,8 @@ CREATE TABLE available_slots (
     datetime TIMESTAMP NOT NULL,
     address TEXT,
     doctor_id UUID REFERENCES doctor(id),
-    is_reserved BOOLEAN DEFAULT FALSE
+    is_reserved BOOLEAN DEFAULT FALSE,
+    price FLOAT
 );
 
 CREATE TABLE reservation (

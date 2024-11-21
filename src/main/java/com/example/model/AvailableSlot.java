@@ -25,6 +25,9 @@ public class AvailableSlot {
     @Column(nullable = false, name = "is_reserved")
     private boolean isReserved;
 
+    @Column(name = "price")
+    private float price;
+
     public UUID getId() {
         return id;
     }
@@ -63,5 +66,13 @@ public class AvailableSlot {
 
     public void setReserved(boolean isReserved) {
         this.isReserved = isReserved;
+    }
+
+    public float getPrice() {
+        return price;
+    }
+
+    public void setPrice(float price) {
+        this.price = price;
     }
 }
