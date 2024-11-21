@@ -316,7 +316,7 @@
                         cell.innerHTML = '';
                     } else {
                         cell.innerHTML = date;
-                        const reservationDate = new Date(year, month, date).toISOString().split('T')[0];
+                                const reservationDate = new Date(Date.UTC(year, month, date)).toISOString().split('T')[0];
 
                         if (availableSlots.includes(reservationDate)) {
                             cell.classList.add('highlight');

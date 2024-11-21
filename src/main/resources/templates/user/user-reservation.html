@@ -209,7 +209,7 @@
                     break;
                 } else {
                     cell.innerHTML = date;
-                    const reservationDate = new Date(year, month, date).toISOString().split('T')[0];
+                    const reservationDate = new Date(Date.UTC(year, month, date)).toISOString().split('T')[0];
                     if (reservations.includes(reservationDate)) {
                         cell.classList.add('highlight');
                     }
